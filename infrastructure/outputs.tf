@@ -1,0 +1,16 @@
+output "db_password" {
+  value     = random_password.db_password.result
+  sensitive = true # Ensures the password doesn't appear in logs
+}
+
+output "expressjs_public_ip" {
+  value = aws_instance.expressjs.public_ip
+}
+
+output "nextjs_public_ip" {
+  value = aws_instance.nextjs.public_ip
+}
+
+output "rds_endpoint" {
+  value = aws_db_instance.postgres.endpoint
+}
