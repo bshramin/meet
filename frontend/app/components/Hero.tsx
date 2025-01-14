@@ -16,9 +16,9 @@ export function Hero() {
           Start monitoring your website like a pro
         </h1>
         <p className="text-center pt-6 text-[#36485C] lg:text-[18px] lg:leading-7">
-          Get a bird's eye view with our cusomizable dashboard. Stay on top of
-          things! Revamp your work process with out fame-chanfing feature. Boost
-          productivity and efficiency!
+          Get a bird`&apos;`s eye view with our cusomizable dashboard. Stay on
+          top of things! Revamp your work process with out fame-chanfing
+          feature. Boost productivity and efficiency!
         </p>
 
         <div className="flex w-full pt-8 justify-center gap-x-6">

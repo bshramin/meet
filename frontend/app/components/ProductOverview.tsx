@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
-import { StarIcon } from "@heroicons/react/20/solid";
-import { Radio, RadioGroup } from "@headlessui/react";
+// import { useState } from "react";
+// import { StarIcon } from "@heroicons/react/20/solid";
+// import { Radio, RadioGroup } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const product = {
@@ -16,14 +16,9 @@ const product = {
   description:
     'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
 };
-const reviews = { href: "#", average: 4, totalCount: 117 };
-
-function classNames(...classes) {
-  return classes.filter(Boolean).join(" ");
-}
 
 export default function ProductOverview() {
-  const [productCount, setProductCount] = useState(1);
+  // const [productCount, setProductCount] = useState(1);
 
   return (
     <div className="bg-white">
