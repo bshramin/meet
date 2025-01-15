@@ -1,0 +1,78 @@
+# .github/workflows/foundry-test.yml
+name: Foundry Tests
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'contracts/**'
+
+env:
+  FOUNDRY_PROFILE: ci
+
+jobs:
+  check:
+    name: Foundry Tests
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./contracts
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+        with:
+          version: nightly
+
+      - name: Cache Forge dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.foundry/cache
+            ~/.foundry/rpc-cache
+            ./contracts/cache
+            ./contracts/out
+          key: foundry-${{ runner.os }}-${{ hashFiles('./contracts/foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Run Tests
+        run: |
+          forge test -vvv
+        env:
+          # Add any environment variables needed for tests
+          FOUNDRY_FUZZ_RUNS: 256
+
+      - name: Run Coverage Report
+        run: |
+          forge coverage --report lcov
+        id: coverage
+
+      - name: Upload Coverage Report
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./contracts/lcov.info
+          flags: smart-contracts
+          fail_ci_if_error: true
+
+      - name: Check Gas Snapshots
+        run: |
+          forge snapshot --check
+        id: gas
+
+      - name: Run Slither Static Analysis
+        uses: crytic/slither-action@v0.3.0
+        with:
+          target: ./contracts/
+          slither-args: --exclude naming-convention --exclude external-function

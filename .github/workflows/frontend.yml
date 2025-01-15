@@ -1,0 +1,47 @@
+name: Frontend Deployment
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build and deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_FRONTEND_SSH_KEY }}
+        HOST: ${{ secrets.EC2_FRONTEND_HOST }}
+        USER: ${{ secrets.EC2_USERNAME }}
+      run: |
+        # Save private key to file
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        
+        # Build the Docker image
+        docker build -t frontend:latest frontend/
+        
+        # Save the image to a tar file
+        docker save frontend:latest > frontend.tar
+        
+        # Copy the tar file to the EC2 instance
+        scp -i private_key.pem -o StrictHostKeyChecking=no frontend.tar ${USER}@${HOST}:~/
+        
+        # Load and run the Docker image on EC2
+        ssh -i private_key.pem -o StrictHostKeyChecking=no ${USER}@${HOST} "\
+          docker load < frontend.tar && \
+          docker stop frontend || true && \
+          docker rm frontend || true && \
+          docker run -d --name frontend \
+            --restart unless-stopped \
+            -p 80:80 \
+            frontend:latest && \
+          rm frontend.tar"
+          
+        # Cleanup local files
+        rm -f private_key.pem frontend.tar

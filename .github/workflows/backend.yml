@@ -1,0 +1,47 @@
+name: Backend Deployment
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'backend/**'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Build and deploy to EC2
+      env:
+        PRIVATE_KEY: ${{ secrets.EC2_BACKEND_SSH_KEY }}
+        HOST: ${{ secrets.EC2_BACKEND_HOST }}
+        USER: ${{ secrets.EC2_USERNAME }}
+      run: |
+        # Save private key to file
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        
+        # Build the Docker image
+        docker build -t backend:latest backend/
+        
+        # Save the image to a tar file
+        docker save backend:latest > backend.tar
+        
+        # Copy the tar file to the EC2 instance
+        scp -i private_key.pem -o StrictHostKeyChecking=no backend.tar ${USER}@${HOST}:~/
+        
+        # Load and run the Docker image on EC2
+        ssh -i private_key.pem -o StrictHostKeyChecking=no ${USER}@${HOST} "\
+          docker load < backend.tar && \
+          docker stop backend || true && \
+          docker rm backend || true && \
+          docker run -d --name backend \
+            --restart unless-stopped \
+            -p 3000:3000 \
+            backend:latest && \
+          rm backend.tar"
+          
+        # Cleanup local files
+        rm -f private_key.pem backend.tar
