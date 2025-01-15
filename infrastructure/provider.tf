@@ -10,5 +10,5 @@ terraform {
 }
 
 provider "aws" {
-  region = "us-east-1" # Get this from inputs?
+  region = "us-east-1" # Maybe get this from inputs?
 }
