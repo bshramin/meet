@@ -1,5 +1,5 @@
 # .github/workflows/foundry-test.yml
-name: Foundry Tests
+name: Contract Tests
 
 on:
   push:
