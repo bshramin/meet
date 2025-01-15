@@ -1,10 +1,10 @@
 terraform {
   backend "s3" {
-    bucket         = aws_s3_bucket.terraform_state.id
+    bucket         = "amin-meet-app-state-bucket"
     key            = "state/terraform.tfstate" # Replace with your desired path
     region         = "us-east-1"               # Match the region of your bucket
     encrypt        = true
-    dynamodb_table = aws_dynamodb_table.terraform_lock.name
+    dynamodb_table = "terraform-lock-table"
   }
 }
 
