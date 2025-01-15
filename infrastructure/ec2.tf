@@ -39,6 +39,7 @@ resource "aws_security_group" "web_server" {
   }
 }
 
+
 # EC2 instance for Express.js
 resource "aws_instance" "expressjs" {
   ami           = "ami-0f403e3180720dd7e" # Amazon Linux 2023 AMI ID
