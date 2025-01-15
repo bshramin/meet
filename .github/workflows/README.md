@@ -16,4 +16,5 @@
 #### Github secrets needed
 - `AWS_ACCESS_KEY_ID`
 - `AWS_SECRET_ACCESS_KEY`
+#### Github variables needed
 - `AWS_REGION`
