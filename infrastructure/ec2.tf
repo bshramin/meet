@@ -39,6 +39,12 @@ resource "aws_security_group" "web_server" {
   }
 }
 
+# Create SSH key pair
+resource "aws_key_pair" "deploy_key" {
+  key_name   = "github-actions-deploy-key"
+  public_key = file("${path.module}/keys/github-deploy.pub")
+}
+
 
 # EC2 instance for Express.js
 resource "aws_instance" "expressjs" {
@@ -48,6 +54,7 @@ resource "aws_instance" "expressjs" {
   subnet_id                   = data.aws_subnets.default.ids[0]
   vpc_security_group_ids      = [aws_security_group.web_server.id]
   associate_public_ip_address = true
+  key_name                    = aws_key_pair.deploy_key.key_name
 
   tags = {
     Name = "meet-expressjs-server"
@@ -67,6 +74,7 @@ resource "aws_instance" "nextjs" {
   subnet_id                   = data.aws_subnets.default.ids[0]
   vpc_security_group_ids      = [aws_security_group.web_server.id]
   associate_public_ip_address = true
+  key_name                    = aws_key_pair.deploy_key.key_name
 
   tags = {
     Name = "meet-nextjs-server"

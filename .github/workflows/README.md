@@ -1,16 +1,13 @@
 ## Frontend
 #### Github secrets needed
-- `EC2_FRONTEND_SSH_KEY`
+- `SSH_PRIVATE_KEY`
 - `EC2_FRONTEND_HOST`
-- `EC2_FRONTEND_USERNAME`
 
 
 ## Backend
 #### Github secrets needed
-- `EC2_BACKEND_SSH_KEY`
+- `SSH_PRIVATE_KEY`
 - `EC2_BACKEND_HOST`
-- `EC2_BACKEND_USERNAME`
-
 
 ## Terraform
 #### Github secrets needed

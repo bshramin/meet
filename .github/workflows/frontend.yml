@@ -11,9 +11,9 @@ jobs:
     
     - name: Build and deploy to EC2
       env:
-        PRIVATE_KEY: ${{ secrets.EC2_FRONTEND_SSH_KEY }}
-        HOST: ${{ secrets.EC2_FRONTEND_HOST }}
-        USER: ${{ secrets.EC2_USERNAME }}
+        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOST: ${{ var.EC2_FRONTEND_HOST }}
+        USER: ec2-user
       run: |
         # Save private key to file
         echo "$PRIVATE_KEY" > private_key.pem
