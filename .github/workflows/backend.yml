@@ -12,7 +12,7 @@ jobs:
     - name: Build and deploy to EC2
       env:
         PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-        HOST: ${{ var.EC2_BACKEND_HOST }}
+        HOST: ${{ vars.EC2_BACKEND_HOST }}
         USER: ec2-user
       run: |
         # Save private key to file
