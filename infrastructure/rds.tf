@@ -19,7 +19,7 @@ resource "aws_security_group" "rds" {
 
 # RDS instance
 resource "aws_db_instance" "postgres" {
-  identifier        = "my-postgres-db"
+  identifier        = "meet-postgres-db"
   engine            = "postgres"
   engine_version    = "17.2"
   instance_class    = "db.t3.micro" # Free tier eligible
