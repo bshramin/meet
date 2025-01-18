@@ -35,7 +35,7 @@ jobs:
           docker rm backend || true && \
           docker run -d --name backend \
             --restart unless-stopped \
-            -p 80:3000 \
+            -p 80:3001 \
             backend:latest && \
           rm backend.tar"
           

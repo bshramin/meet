@@ -35,7 +35,7 @@ ENV NODE_ENV=production
 USER nodejs
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3001
 
 # Use dumb-init as entrypoint
 ENTRYPOINT ["dumb-init", "--"]
