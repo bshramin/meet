@@ -4,8 +4,6 @@ name: Contract Tests
 on:
   push:
     branches: [ main ]
-  pull_request:
-    branches: [ main ]
     paths:
       - 'contracts/**'
 

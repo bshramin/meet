@@ -1,6 +1,12 @@
 name: Frontend Deploy
 
-on: workflow_dispatch
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
 
 jobs:
   deploy:
