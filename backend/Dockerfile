@@ -1,14 +1,13 @@
 # Build stage
 FROM node:18-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
 # Copy package files
 COPY package*.json ./
 
-# Install dependencies
-RUN npm ci
+# Install dependencies (using regular install instead of ci)
+RUN npm install
 
 # Copy source code
 COPY . .
@@ -19,7 +18,6 @@ RUN npm run build --if-present
 # Production stage
 FROM node:18-slim
 
-# Set working directory
 WORKDIR /app
 
 # Create a non-root user
@@ -33,8 +31,8 @@ ENV NODE_ENV production
 # Copy package files
 COPY package*.json ./
 
-# Install only production dependencies
-RUN npm ci --only=production && \
+# Install production dependencies
+RUN npm install --only=production && \
   npm cache clean --force
 
 # Copy built application from builder stage
@@ -46,10 +44,6 @@ USER expressuser
 
 # Expose port
 EXPOSE 3000
-
-# Health check
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhost:3000/health || exit 1
 
 # Start the application
 CMD ["npm", "start"]
