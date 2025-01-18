@@ -1,49 +1,44 @@
 # Build stage
-FROM node:18-slim AS builder
+FROM node:20-alpine AS builder
 
-WORKDIR /app
+# Set working directory
+WORKDIR /usr/src/app
 
-# Copy package files
-COPY package*.json ./
+# Copy package.json
+COPY package.json ./
 
-# Install dependencies (using regular install instead of ci)
-RUN npm install
+# Install dependencies
+RUN npm install --production
 
-# Copy source code
+# Copy application files
 COPY . .
 
-# Build the application (if you have a build step)
-RUN npm run build --if-present
-
 # Production stage
-FROM node:18-slim
+FROM node:20-alpine
 
-WORKDIR /app
+# Install dumb-init
+RUN apk add --no-cache dumb-init curl
 
-# Create a non-root user
-RUN addgroup --system --gid 1001 nodejs && \
-  adduser --system --uid 1001 expressuser && \
-  chown -R expressuser:nodejs /app
+# Create non-root user
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
 
-# Set NODE_ENV
-ENV NODE_ENV production
-
-# Copy package files
-COPY package*.json ./
-
-# Install production dependencies
-RUN npm install --only=production && \
-  npm cache clean --force
+# Set working directory
+WORKDIR /usr/src/app
 
 # Copy built application from builder stage
-COPY --from=builder --chown=expressuser:nodejs /app/dist ./dist
-COPY --from=builder --chown=expressuser:nodejs /app/src ./src
+COPY --from=builder --chown=nodejs:nodejs /usr/src/app ./
 
-# Switch to non-root user
-USER expressuser
+# Set NODE_ENV
+ENV NODE_ENV=production
+
+# Set user
+USER nodejs
 
 # Expose port
 EXPOSE 3000
+
+# Use dumb-init as entrypoint
+ENTRYPOINT ["dumb-init", "--"]
 
 # Start the application
 CMD ["npm", "start"]
