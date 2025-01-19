@@ -1,8 +1,6 @@
 "use client";
 
-// import { useState } from "react";
-// import { StarIcon } from "@heroicons/react/20/solid";
-// import { Radio, RadioGroup } from "@headlessui/react";
+import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 
 const product = {
@@ -18,7 +16,30 @@ const product = {
 };
 
 export default function ProductOverview() {
-  // const [productCount, setProductCount] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+
+  const handleClick = async () => {
+    setLoading(true);
+    setError("");
+    console.log("Clicked");
+    try {
+      const response = await fetch("http://localhost:3001");
+
+      if (!response.ok) {
+        throw new Error("Payment failed");
+      }
+
+      const result = await response.json();
+      console.log("Payment success:", result);
+      // Handle success (e.g., show a confirmation message or redirect)
+    } catch (err) {
+      console.error("Error:", err);
+      setError("Failed to process payment. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -83,11 +104,13 @@ export default function ProductOverview() {
               </div>
 
               <button
-                type="submit"
                 className="mt-10 flex w-full items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                onClick={handleClick}
+                disabled={loading}
               >
                 Pay 25$ (0.003 eth)
               </button>
+              {error != "" && <p className="mt-4 text-red-500">{error}</p>}
             </div>
           </div>
         </div>
