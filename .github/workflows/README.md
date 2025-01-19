@@ -1,13 +1,21 @@
 ## Frontend
 #### Github secrets needed
 - `SSH_PRIVATE_KEY`
+#### Github variables needed
 - `EC2_FRONTEND_HOST`
-
+- `BACKEND_BASE_URL`
 
 ## Backend
 #### Github secrets needed
 - `SSH_PRIVATE_KEY`
+- `DATABASE_USER`
+- `DATABASE_PASSWORD`
+- #### Github variables needed
 - `EC2_BACKEND_HOST`
+- `DATABASE_HOST`
+- `DATABASE_PORT`
+- `DATABASE_NAME`
+
 
 ## Terraform
 #### Github secrets needed

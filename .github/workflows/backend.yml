@@ -42,6 +42,11 @@ jobs:
           docker run -d --name backend \
             --restart unless-stopped \
             -p 80:3001 \
+            -e DATABASE_HOST=${{ vars.DATABASE_HOST }} \
+            -e DATABASE_PORT=${{ vars.DATABASE_PORT }} \
+            -e DATABASE_NAME=${{ vars.DATABASE_NAME }} \
+            -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
+            -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
             backend:latest && \
           rm backend.tar"
           
