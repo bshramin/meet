@@ -1,9 +1,3 @@
-import ProductOverview from "./components/ProductOverview";
-
 export default function Home() {
-  return (
-    <>
-      <ProductOverview />
-    </>
-  );
+  return <>Frontend is Up!</>;
 }

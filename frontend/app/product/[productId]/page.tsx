@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
+import { useParams } from "next/navigation";
 
 const product = {
   name: "One hour session with Setareh",
@@ -18,13 +19,17 @@ const product = {
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const { productId } = useParams<{ productId: string }>();
 
   const handleClick = async () => {
+    // TODO: This call should use useEffect
     setLoading(true);
     setError("");
     console.log("Clicked");
     try {
-      const response = await fetch("http://localhost:3001");
+      const response = await fetch(
+        `http://localhost:3001/product/${productId}`
+      );
 
       if (!response.ok) {
         throw new Error("Payment failed");
