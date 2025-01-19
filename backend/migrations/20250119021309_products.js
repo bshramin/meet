@@ -5,10 +5,10 @@
 exports.up = async function (knex) {
   // Create the products table
   await knex.schema.createTable("products", (table) => {
-    table.increments("id").primary(); // Primary key
+    table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
     table.string("name").notNullable(); // Product name
     table.decimal("price", 10, 2).notNullable(); // Product price
-    table.integer("merchant_id").unsigned().notNullable(); // Foreign key to merchants table
+    table.uuid("merchant_id").notNullable(); // Foreign key to merchants table (now UUID)
     table
       .foreign("merchant_id")
       .references("id")
