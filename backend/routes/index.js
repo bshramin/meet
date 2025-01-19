@@ -1,10 +1,9 @@
 var express = require("express");
 var router = express.Router();
+const { getMerchantById } = require("../repository/merchants");
 
-/* GET home page. */
 router.get("/", function (req, res, next) {
-  // res.render("index", { title: "Express" });
-  res.json({ title: "Express Backend" });
+  res.render("index", { title: "Express server is up!" });
 });
 
 module.exports = router;
