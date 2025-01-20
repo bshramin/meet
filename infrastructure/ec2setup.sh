@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Update system
 yum update -y
 
@@ -15,5 +16,11 @@ systemctl enable docker
 # Add ec2-user to docker group to run docker without sudo
 usermod -aG docker ec2-user
 
-# Verify installation
+# Install PostgreSQL client only
+yum install -y postgresql15
+
+# Verify installations
+echo "Checking installed versions:"
 docker --version
+psql --version
+git --version
