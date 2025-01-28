@@ -11,6 +11,10 @@ module.exports = {
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
 
     migrations: {
@@ -26,6 +30,10 @@ module.exports = {
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
     pool: {
       min: 2,
@@ -44,6 +52,10 @@ module.exports = {
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
     },
     pool: {
       min: 2,
