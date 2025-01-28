@@ -39,13 +39,13 @@ jobs:
           docker load < migration.tar && \
           docker stop migration || true && \
           docker rm migration || true && \
-          docker run -d --name migration \
+          docker run --name migration \
             -e DATABASE_HOST=${{ vars.DATABASE_HOST }} \
             -e DATABASE_PORT=${{ vars.DATABASE_PORT }} \
             -e DATABASE_NAME=${{ vars.DATABASE_NAME }} \
             -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
             -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-            migration:latest sh -c 'knex migrate:latest && npm start' && \
+            migration:latest sh -c 'knex migrate:latest' && \
           rm migration.tar"
           
         # Cleanup local files
