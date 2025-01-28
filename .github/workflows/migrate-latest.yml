@@ -45,7 +45,7 @@ jobs:
             -e DATABASE_NAME=${{ vars.DATABASE_NAME }} \
             -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
             -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
-            migration:latest sh -c 'knex migrate:latest' && \
+            migration:latest knex migrate:latest && \
           rm migration.tar"
           
         # Cleanup local files
