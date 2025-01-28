@@ -1,0 +1,52 @@
+name: Migrate Latest
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'backend/migrations/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Run migration
+      env:
+        PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        HOST: ${{ vars.EC2_BACKEND_HOST }}
+        USER: ec2-user
+      run: |
+        # Save private key to file
+        echo "$PRIVATE_KEY" > private_key.pem
+        chmod 600 private_key.pem
+        
+        # Build the Docker image
+        docker build -t migration:latest -f backend/DockerfileMigration backend/
+
+        # Save the image to a tar file
+        docker save migration:latest > migration.tar
+        
+        # Copy the tar file to the EC2 instance
+        scp -i private_key.pem -o StrictHostKeyChecking=no migration.tar ${USER}@${HOST}:~/
+        
+        # Load and run the Docker image on EC2
+        ssh -i private_key.pem -o StrictHostKeyChecking=no ${USER}@${HOST} "\
+          docker load < migration.tar && \
+          docker stop migration || true && \
+          docker rm migration || true && \
+          docker run -d --name migration \
+            -e DATABASE_HOST=${{ vars.DATABASE_HOST }} \
+            -e DATABASE_PORT=${{ vars.DATABASE_PORT }} \
+            -e DATABASE_NAME=${{ vars.DATABASE_NAME }} \
+            -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
+            -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+            migration:latest sh -c 'knex migrate:latest && npm start' && \
+          rm migration.tar"
+          
+        # Cleanup local files
+        rm -f private_key.pem migration.tar

@@ -1,0 +1,33 @@
+# Build stage
+FROM node:20-alpine
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Create non-root user
+RUN addgroup -S nodejs && adduser -S nodejs -G nodejs
+
+
+# Install dumb-init and curl
+RUN apk add --no-cache dumb-init curl
+
+# Install knex globally (if needed)
+RUN npm install -g knex
+
+# Copy package.json and package-lock.json
+COPY package.json package-lock.json* ./
+
+# Install dependencies (including knex)
+RUN npm install --production
+
+# Copy application files
+COPY . .
+
+# Set NODE_ENV
+ENV NODE_ENV=production
+
+# Use dumb-init as entrypoint
+ENTRYPOINT ["dumb-init", "--"]
+
+# Run knex migrations
+CMD ["knex", "migrate:latest"]
