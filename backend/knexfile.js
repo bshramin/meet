@@ -7,6 +7,7 @@ module.exports = {
   development: {
     client: "postgresql",
     connection: {
+      host: process.env.DATABASE_HOST || "127.0.0.1",
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
@@ -21,6 +22,7 @@ module.exports = {
   staging: {
     client: "postgresql",
     connection: {
+      host: process.env.DATABASE_HOST || "127.0.0.1",
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
@@ -38,6 +40,7 @@ module.exports = {
   production: {
     client: "postgresql",
     connection: {
+      host: process.env.DATABASE_HOST || "127.0.0.1",
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
