@@ -6,6 +6,9 @@ const db = pgp({
   database: process.env.DATABASE_NAME || "meetdb",
   user: process.env.DATABASE_USER || "meetuser",
   password: process.env.DATABASE_PASSWORD || "password",
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
 
 module.exports = db;
