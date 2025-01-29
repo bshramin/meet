@@ -42,7 +42,6 @@ jobs:
           docker run -d --name frontend \
             --restart unless-stopped \
             -p 80:3000 \
-            -e NEXT_PUBLIC_BACKEND_BASE_URL=${{ vars.NEXT_PUBLIC_BACKEND_BASE_URL }} \
             frontend:latest && \
           rm frontend.tar"
           
