@@ -4,6 +4,8 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 
+const BASE_URL = process.env.BACKEND_BASE_URL || "http://localhost:3001";
+
 const product = {
   name: "One hour session with Setareh",
   price: "$30",
@@ -27,9 +29,7 @@ export default function ProductOverview() {
     setError("");
     console.log("Clicked");
     try {
-      const response = await fetch(
-        `http://localhost:3001/product/${productId}`
-      );
+      const response = await fetch(`${BASE_URL}/product/${productId}`);
 
       if (!response.ok) {
         throw new Error("Payment failed");
