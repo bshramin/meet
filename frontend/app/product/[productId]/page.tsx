@@ -4,7 +4,8 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 
-const BASE_URL = process.env.BACKEND_BASE_URL || "http://localhost:3001";
+const BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
 
 const product = {
   name: "One hour session with Setareh",
@@ -28,6 +29,7 @@ export default function ProductOverview() {
     setLoading(true);
     setError("");
     console.log("Clicked");
+    console.log("BASE_URL", BASE_URL);
     try {
       const response = await fetch(`${BASE_URL}/product/${productId}`);
 

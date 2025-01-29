@@ -3,7 +3,7 @@
 - `SSH_PRIVATE_KEY`
 #### Github variables needed
 - `EC2_FRONTEND_HOST`
-- `BACKEND_BASE_URL`
+- `NEXT_PUBLIC_BACKEND_BASE_URL`
 
 ## Backend
 #### Github secrets needed
