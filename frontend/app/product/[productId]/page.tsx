@@ -4,9 +4,6 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 
-const BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
-
 const product = {
   name: "One hour session with Setareh",
   price: "$30",
@@ -26,6 +23,8 @@ export default function ProductOverview() {
 
   const handleClick = async () => {
     // TODO: This call should use useEffect
+    const BASE_URL =
+      process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
     setLoading(true);
     setError("");
     console.log("Clicked");
