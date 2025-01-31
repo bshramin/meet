@@ -22,3 +22,10 @@
 - `AWS_SECRET_ACCESS_KEY`
 #### Github variables needed
 - `AWS_REGION`
+
+
+## Contracts
+#### Github secrets needed
+- `TESTNET_RPC_URL`
+- `TESTNET_PRIVATE_KEY`
+- `TESTNET_ETHERSCAN_API_KEY`

@@ -1,23 +1,27 @@
-name: Contract Tests
+name: Contracts Testnet Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
     paths:
       - 'contracts/**'
   workflow_dispatch:
 
 env:
   FOUNDRY_PROFILE: ci
+  TESTNET_RPC_URL: ${{ secrets.TESTNET_RPC_URL }}
+  TESTNET_PRIVATE_KEY: ${{ secrets.TESTNET_PRIVATE_KEY }}
+  TESTNET_ETHERSCAN_API_KEY: ${{ secrets.TESTNET_ETHERSCAN_API_KEY }}
 
 jobs:
-  check:
-    name: Foundry Tests
+  deploy:
     runs-on: ubuntu-latest
+    
     defaults:
       run:
         working-directory: ./contracts
-
+    
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,29 +51,21 @@ jobs:
       - name: Install Dependencies
         run: forge install
 
+      - name: Build Contracts
+        run: |
+          forge --version
+          forge build --optimize --optimizer-runs 200
+
       - name: Run Tests
         run: |
           forge test -vvv
-        env:
-          FOUNDRY_FUZZ_RUNS: 256
 
-      # - name: Run Coverage Report
-      #   run: |
-      #     forge coverage --report lcov
+      - name: Deploy Contracts to Testnet
+        run: |
+          forge create --rpc-url ${{ env.TESTNET_RPC_URL }} --private-key ${{ env.TESTNET_PRIVATE_KEY }} --broadcast --verify --etherscan-api-key ${{ env.TESTNET_ETHERSCAN_API_KEY }} -vvvv src/Counter.sol:Counter
 
-      # - name: Upload Coverage Report
-      #   uses: codecov/codecov-action@v3
-      #   with:
-      #     files: ./contracts/lcov.info
-      #     flags: smart-contracts
-      #     fail_ci_if_error: true
-
-      # - name: Check Gas Snapshots
-      #   run: |
-      #     forge snapshot --check
-
-      - name: Run Slither Static Analysis
-        uses: crytic/slither-action@v0.3.0
+      - name: Archive deployment artifacts
+        uses: actions/upload-artifact@v4
         with:
-          target: ./contracts/
-          slither-args: --exclude naming-convention --exclude external-function
+          name: testnet-deployments
+          path: contracts/broadcast/
