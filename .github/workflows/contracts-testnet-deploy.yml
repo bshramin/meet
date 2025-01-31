@@ -1,11 +1,11 @@
 name: Contracts Testnet Deploy
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'contracts/**'
+  # push:
+  #   branches:
+  #     - main
+  #   paths:
+  #     - 'contracts/**'
   workflow_dispatch:
 
 env:
