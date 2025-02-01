@@ -26,7 +26,8 @@ jobs:
         chmod 600 private_key.pem
         
         # Build the Docker image
-        docker build -t frontend:latest frontend/
+        docker build \
+          -t frontend:latest frontend/
         
         # Save the image to a tar file
         docker save frontend:latest > frontend.tar
@@ -42,6 +43,7 @@ jobs:
           docker run -d --name frontend \
             --restart unless-stopped \
             -p 80:3000 \
+            -e NEXT_PUBLIC_BLOCKCHAIN_RPC_URL=${{ secrets.NEXT_PUBLIC_BLOCKCHAIN_RPC_URL }} \
             frontend:latest && \
           rm frontend.tar"
           
