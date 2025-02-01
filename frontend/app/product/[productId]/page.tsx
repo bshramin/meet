@@ -4,11 +4,13 @@ import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 import {
-  blockNumber,
   CHAIN_ID,
   CONTRACT_ADDRESS,
+  publicClient,
   RPC_URL,
+  walletClient,
 } from "@/app/web3/ethereum/client";
+import { getCount, increment } from "@/app/web3/ethereum/counter";
 
 const product = {
   name: "One hour session with Setareh",
@@ -35,6 +37,9 @@ export default function ProductOverview() {
     setError("");
     console.log("Clicked");
     console.log("BASE_URL", BASE_URL);
+    increment().then((result) => {
+      console.log("increment result: ", result);
+    });
     try {
       const response = await fetch(`${BASE_URL}/product/${productId}`);
 
@@ -56,7 +61,16 @@ export default function ProductOverview() {
   console.log("RPC_URL: ", RPC_URL);
   console.log("CHAIN_ID: ", CHAIN_ID);
   console.log("CONTRACT_ADDRESS: ", CONTRACT_ADDRESS);
-  console.log("Block number: ", blockNumber);
+
+  getCount().then((result) => {
+    console.log("getCounter: ", Number(result));
+  });
+  publicClient.getBlockNumber().then((blockNumber) => {
+    console.log("Block number: ", Number(blockNumber));
+  });
+  walletClient.requestAddresses().then((addresses) => {
+    console.log("Account Addresses: ", addresses);
+  });
   return (
     <div className="bg-white">
       <div className="pt-6">
