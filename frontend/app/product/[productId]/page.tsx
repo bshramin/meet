@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
+import blockNumber from "@/app/web3/ethereum/client";
 
 const product = {
   name: "One hour session with Setareh",
@@ -47,6 +48,7 @@ export default function ProductOverview() {
     }
   };
 
+  console.log("Block number: ", blockNumber);
   return (
     <div className="bg-white">
       <div className="pt-6">
