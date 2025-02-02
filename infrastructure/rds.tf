@@ -27,7 +27,7 @@ resource "aws_db_instance" "postgres" {
   storage_type      = "gp2"
 
   db_name  = "meetdb"
-  username = "dbadmin"
+  username = "meetuser"
   password = random_password.db_password.result
 
   vpc_security_group_ids = [aws_security_group.rds.id]
