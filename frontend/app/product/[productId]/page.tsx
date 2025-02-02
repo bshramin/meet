@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 import {
@@ -12,50 +12,48 @@ import {
 } from "@/app/web3/ethereum/client";
 import { getCount, increment } from "@/app/web3/ethereum/counter";
 
-const product = {
-  name: "One hour session with Setareh",
-  price: "$30",
-  href: "#",
-  breadcrumbs: [
-    { id: 1, name: "Men", href: "#" },
-    { id: 2, name: "Clothing", href: "#" },
-  ],
-  description:
-    'The Basic Tee 6-Pack allows you to fully express your vibrant personality with three grayscale options. Feeling adventurous? Put on a heather gray tee. Want to be a trendsetter? Try our exclusive colorway: "Black". Need to add an extra pop of color to your outfit? Our white tee has you covered.',
-};
-
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [product, setProduct] = useState({
+    name: "Loading...",
+    description: "Loading...",
+    price: 0,
+  });
   const { productId } = useParams<{ productId: string }>();
 
-  const handleClick = async () => {
-    // TODO: This call should use useEffect
+  useEffect(() => {
     const BASE_URL =
       process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
     setLoading(true);
     setError("");
-    console.log("Clicked");
+    console.log("Fetching data...");
     console.log("BASE_URL", BASE_URL);
+
+    async function fetchData() {
+      try {
+        const response = await fetch(`${BASE_URL}/product/${productId}`);
+        if (!response.ok) {
+          throw new Error("Payment failed");
+        }
+        const result = await response.json();
+        console.log("Product data received:", result);
+        setProduct(result);
+      } catch (err) {
+        console.error("Failed to fetch product error:", err);
+        setError("Failed to fetch product. Please try again.");
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, [productId]); // Runs when productId changes
+
+  const handleClick = async () => {
     increment().then((result) => {
       console.log("increment result: ", result);
     });
-    try {
-      const response = await fetch(`${BASE_URL}/product/${productId}`);
-
-      if (!response.ok) {
-        throw new Error("Payment failed");
-      }
-
-      const result = await response.json();
-      console.log("Payment success:", result);
-      // Handle success (e.g., show a confirmation message or redirect)
-    } catch (err) {
-      console.error("Error:", err);
-      setError("Failed to process payment. Please try again.");
-    } finally {
-      setLoading(false);
-    }
   };
 
   console.log("RPC_URL: ", RPC_URL);

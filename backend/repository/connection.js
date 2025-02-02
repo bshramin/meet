@@ -1,4 +1,5 @@
 const pgp = require("pg-promise")(/* options */);
+require("dotenv").config(); // Load environment variables from .env file
 
 const db = pgp({
   host: process.env.DATABASE_HOST || "localhost",
@@ -6,9 +7,12 @@ const db = pgp({
   database: process.env.DATABASE_NAME || "meetdb",
   user: process.env.DATABASE_USER || "meetuser",
   password: process.env.DATABASE_PASSWORD || "password",
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl:
+    process.env.NODE_ENV === "development"
+      ? false
+      : {
+          rejectUnauthorized: false,
+        },
 });
 
 module.exports = db;
