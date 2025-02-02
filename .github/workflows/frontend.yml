@@ -43,7 +43,6 @@ jobs:
           docker run -d --name frontend \
             --restart unless-stopped \
             -p 80:3000 \
-            -e NEXT_PUBLIC_BLOCKCHAIN_RPC_URL=${{ secrets.NEXT_PUBLIC_BLOCKCHAIN_RPC_URL }} \
             frontend:latest && \
           rm frontend.tar"
           
