@@ -11,10 +11,13 @@ module.exports = {
       database: process.env.DATABASE_NAME || "meetdb",
       user: process.env.DATABASE_USER || "meetuser",
       password: process.env.DATABASE_PASSWORD || "password",
-      ssl: {
-        require: true,
-        rejectUnauthorized: false,
-      },
+      ssl:
+        process.env.NODE_ENV === "development"
+          ? false
+          : {
+              require: true,
+              rejectUnauthorized: false,
+            },
     },
 
     migrations: {

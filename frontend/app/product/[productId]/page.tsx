@@ -12,27 +12,40 @@ import {
 } from "@/app/web3/ethereum/client";
 import { getCount, increment } from "@/app/web3/ethereum/counter";
 
+const BACKEND_BASE_URL =
+  process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
+
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [productQuantity, setProductQuantity] = useState(0); // TODO: change
   const [product, setProduct] = useState({
+    id: "",
+    merchant_id: "",
     name: "Loading...",
     description: "Loading...",
     price: 0,
   });
+  const [order, setOrder] = useState({
+    id: "",
+    merchant_id: "",
+    total_amount: 0,
+    status: "",
+    items: [],
+  });
   const { productId } = useParams<{ productId: string }>();
 
   useEffect(() => {
-    const BASE_URL =
-      process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
     setLoading(true);
     setError("");
     console.log("Fetching data...");
-    console.log("BASE_URL", BASE_URL);
+    console.log("BACKEND_BASE_URL", BACKEND_BASE_URL);
 
     async function fetchData() {
       try {
-        const response = await fetch(`${BASE_URL}/product/${productId}`);
+        const response = await fetch(
+          `${BACKEND_BASE_URL}/products/${productId}`
+        );
         if (!response.ok) {
           throw new Error("Payment failed");
         }
@@ -51,9 +64,47 @@ export default function ProductOverview() {
   }, [productId]); // Runs when productId changes
 
   const handleClick = async () => {
+    try {
+      const response = await fetch(`${BACKEND_BASE_URL}/orders`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          merchant_id: product.merchant_id,
+          items: [
+            {
+              product_id: product.id,
+              quantity: productQuantity,
+            },
+          ],
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Order creation failed");
+      }
+
+      const result = await response.json();
+      console.log("Order created successfully:", result);
+      setOrder(result);
+    } catch (err) {
+      console.error("Failed to create order:", err);
+      throw new Error("Failed to create order. Please try again.");
+    } finally {
+      // You can add any cleanup or finalization logic here if needed
+    }
+
+    // 2. Pay the order
     increment().then((result) => {
       console.log("increment result: ", result);
     });
+
+    // 3. Wait for payment to go through
+
+    // 4. Retrieve the order status
+
+    // 5. Show a message to the user
   };
 
   console.log("RPC_URL: ", RPC_URL);

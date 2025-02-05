@@ -40,7 +40,6 @@ exports.seed = async function (knex) {
       {
         id: "7d4c90e7-af3b-4348-8c3d-c4965b42b28f",
         merchant_id: merchant.id,
-        total_amount: product.price * 3, // Order for 3 sessions
         status: "pending",
       },
     ])

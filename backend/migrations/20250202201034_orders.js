@@ -7,7 +7,6 @@ exports.up = async function (knex) {
   await knex.schema.createTable("orders", (table) => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
     table.uuid("merchant_id").notNullable(); // Foreign key to merchants
-    table.decimal("total_amount", 10, 2).notNullable(); // Total order amount
     table.string("status").notNullable().defaultTo("pending"); // Order status
     table.timestamps(true, true); // Created at and Updated at
 
