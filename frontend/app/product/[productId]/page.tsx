@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronDownIcon } from "@heroicons/react/16/solid";
 import { useParams } from "next/navigation";
 import {
   CHAIN_ID,
@@ -86,7 +85,7 @@ export default function ProductOverview() {
       }
 
       const result = await response.json();
-      console.log("Order created successfully:", result);
+      console.log("Order created successfully:", result, order);
       setOrder(result);
     } catch (err) {
       console.error("Failed to create order:", err);
