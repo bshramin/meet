@@ -26,7 +26,7 @@ exports.seed = async function (knex) {
       {
         id: "48b406f2-6437-4248-a246-6b957e16b15b",
         name: "One-hour session with Dylan",
-        price: 24.99,
+        price: 25,
         description:
           "This one-hour therapy session with Dylan provides a personalized approach to mental wellness, including cognitive restructuring, mindfulness techniques, and optional guided exercises tailored to individual needs. The session is ideal for those dealing with stress, anxiety, or personal growth challenges. Whether you're looking for coping strategies, emotional support, or a structured therapeutic plan, Dylan ensures a safe and supportive environment to help you navigate your journey.",
         merchant_id: merchant.id,
