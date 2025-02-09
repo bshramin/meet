@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function (knex) {
+export async function up(knex) {
   // Create the products table
   await knex.schema.createTable("products", (table) => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
@@ -17,13 +17,13 @@ exports.up = async function (knex) {
       .onDelete("CASCADE"); // Set foreign key
     table.timestamps(true, true); // Created at and Updated at
   });
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async function (knex) {
+export async function down(knex) {
   // Drop the products table first as it depends on the merchants table
   await knex.schema.dropTableIfExists("products");
-};
+}

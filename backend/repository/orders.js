@@ -1,4 +1,4 @@
-const db = require("./connection");
+import db from "./connection.js";
 
 function createOrder(orderData) {
   const { merchant_id } = orderData;
@@ -20,4 +20,4 @@ function createOrderItem(order_id, product_id, product_price, quantity) {
   );
 }
 
-module.exports = { createOrder, createOrderItem };
+export { createOrder, createOrderItem };

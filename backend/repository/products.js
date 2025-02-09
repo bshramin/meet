@@ -1,7 +1,7 @@
-const db = require("./connection");
+import db from "./connection.js";
 
 function getProductById(productId) {
-  return db.one("SELECT * FROM products WHERE id = $1", [productId]);
+return  db.one("SELECT * FROM products WHERE id = $1", [productId]);
 }
 
-module.exports = { getProductById };
+export { getProductById };

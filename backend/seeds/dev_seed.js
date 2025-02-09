@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.seed = async function (knex) {
+export async function seed(knex) {
   // Clear existing data
   await knex("order_items").del();
   await knex("orders").del();
@@ -16,6 +16,8 @@ exports.seed = async function (knex) {
         id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
         name: "Dylan",
         email: "dylan@example.com",
+        wallet: "0x1234567890123456789012345678901234567890",
+        percentage: 90.00,
       },
     ])
     .returning("id");
@@ -55,4 +57,4 @@ exports.seed = async function (knex) {
       unit_price: product.price, // Store the price at time of order
     },
   ]);
-};
+}

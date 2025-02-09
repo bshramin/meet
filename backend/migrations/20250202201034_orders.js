@@ -2,7 +2,7 @@
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.up = async function (knex) {
+export async function up(knex) {
   // Create the orders table
   await knex.schema.createTable("orders", (table) => {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
@@ -40,14 +40,14 @@ exports.up = async function (knex) {
     // Create an index on order_id to improve query performance
     table.index("order_id");
   });
-};
+}
 
 /**
  * @param { import("knex").Knex } knex
  * @returns { Promise<void> }
  */
-exports.down = async function (knex) {
+export async function down(knex) {
   // Drop tables in reverse order
   await knex.schema.dropTableIfExists("order_items");
   await knex.schema.dropTableIfExists("orders");
-};
+}

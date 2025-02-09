@@ -1,7 +1,7 @@
-var express = require("express");
+import  express from "express";
 var router = express.Router();
-const { createOrder, createOrderItem } = require("../repository/orders");
-const { getProductById } = require("../repository/products");
+import { createOrder, createOrderItem } from "../repository/orders.js";
+import { getProductById } from "../repository/products.js";
 
 router.post("/", async function (req, res, next) {
   try {
@@ -52,4 +52,4 @@ router.post("/addItem", function (req, res, next) {
     });
 });
 
-module.exports = router;
+export default router;

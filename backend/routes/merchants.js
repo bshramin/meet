@@ -1,13 +1,12 @@
 import express from"express";
 var router = express.Router();
-import { getProductById } from "../repository/products.js";
+import { getMerchantById } from "../repository/merchants.js";
 
-router.get("/:productId", function (req, res, next) {
-  const productId = req.params.productId;
-
-  getProductById(productId)
-    .then((product) => {
-      res.json(product);
+router.get("/:merchantId", function (req, res, next) {
+  const merchantId = req.params.merchantId;
+  getMerchantById(merchantId)
+    .then((merchant) => {
+      res.json(merchant);
       return;
     })
     .catch((error) => {

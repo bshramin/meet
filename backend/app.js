@@ -1,17 +1,24 @@
-const cors = require("cors");
-var createError = require("http-errors");
-var express = require("express");
-var path = require("path");
-var cookieParser = require("cookie-parser");
-var logger = require("morgan");
+import cors from "cors";
+import express from "express";
+import path from "path";
+import cookieParser from "cookie-parser";
+import logger from "morgan";
+import createError from "http-errors";
 
-var indexRouter = require("./routes/index");
-var productsRouter = require("./routes/products");
-var ordersRouter = require("./routes/orders");
+import indexRouter from "./routes/index.js";
+import productsRouter from "./routes/products.js";
+import merchantsRouter from "./routes/merchants.js";
+import ordersRouter from "./routes/orders.js";
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+import dotenv from "dotenv";
+dotenv.config();
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 var app = express();
 
-require("dotenv").config();
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -26,6 +33,7 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/products", productsRouter);
+app.use("/merchants", merchantsRouter);
 app.use("/orders", ordersRouter);
 
 // catch 404 and forward to error handler
@@ -44,4 +52,4 @@ app.use(function (err, req, res, next) {
   res.render("error");
 });
 
-module.exports = app;
+export default app;

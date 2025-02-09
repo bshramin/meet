@@ -1,9 +1,9 @@
-var express = require("express");
+import express from "express";
 var router = express.Router();
-const { getMerchantById } = require("../repository/merchants");
+import { getMerchantById } from "../repository/merchants.js";
 
 router.get("/", function (req, res, next) {
   res.render("index", { title: "Express server is up!" });
 });
 
-module.exports = router;
+export default router;
