@@ -71,4 +71,4 @@ jobs:
         uses: crytic/slither-action@v0.3.0
         with:
           target: ./contracts/
-          slither-args: --exclude naming-convention 
+          slither-args: --exclude solc-version

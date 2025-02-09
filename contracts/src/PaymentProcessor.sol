@@ -3,13 +3,10 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
-import "@openzeppelin/contracts/utils/Address.sol";
 
 
 
 contract PaymentProcessor is Ownable, ReentrancyGuard {
-    using Address for address payable;
-
     // Events
     event PaymentReceived(address payer, uint256 amount);
     event OrderPaid(
@@ -39,10 +36,9 @@ contract PaymentProcessor is Ownable, ReentrancyGuard {
         uint256 ownerAmount = msg.value - recipientAmount;
 
         // Safer ETH transfer to recipient
-        recipient.sendValue(recipientAmount); // Uses Address.sendValue
-
+        recipient.transfer(recipientAmount);
         // Safer ETH transfer to owner
-        payable(owner()).sendValue(ownerAmount); // Uses Address.sendValue
+        payable(owner()).transfer(ownerAmount);
 
         emit OrderPaid(
             msg.sender,
