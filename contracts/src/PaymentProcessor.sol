@@ -38,16 +38,6 @@ contract PaymentProcessor is Ownable, ReentrancyGuard {
         uint256 recipientAmount = (msg.value * merchantPercentage) / 100;
         uint256 ownerAmount = msg.value - recipientAmount;
 
-        // Send recipient's share
-        (bool successRecipient, ) = recipient.call{value: recipientAmount}("");
-        require(successRecipient, "Failed to send ETH to recipient");
-
-        // Send owner's share
-        (bool successOwner, ) = payable(owner()).call{value: ownerAmount}("");
-        require(successOwner, "Failed to send ETH to owner");
-
-
-
         // Safer ETH transfer to recipient
         recipient.sendValue(recipientAmount); // Uses Address.sendValue
 
