@@ -1,9 +1,11 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.28;
 
-import "@openzeppelin/contracts/access/Ownable.sol";
+import "./Ownable.sol";
+import "./ReentrancyGuard.sol";
 
-contract PaymentProcessor is Ownable {
+
+contract PaymentProcessor is Ownable, ReentrancyGuard {
     // Events
     event PaymentReceived(address payer, uint256 amount);
     event OrderPaid(
@@ -24,7 +26,7 @@ contract PaymentProcessor is Ownable {
         address payable recipient,
         uint256 orderId,
         uint256 merchantPercentage
-    ) external payable {
+    ) external payable nonReentrant {
         require(msg.value > 0, "Must send ETH");
         require(recipient != address(0), "Invalid recipient address");
         require(merchantPercentage <= 100, "Percentage cannot exceed 100");
