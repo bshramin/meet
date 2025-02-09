@@ -2,11 +2,9 @@
 pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
-import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 
-
-contract PaymentProcessor is Ownable, ReentrancyGuard {
+contract PaymentProcessor is Ownable {
     // Events
     event PaymentReceived(address payer, uint256 amount);
     event OrderPaid(
@@ -27,18 +25,13 @@ contract PaymentProcessor is Ownable, ReentrancyGuard {
         address payable recipient,
         uint256 orderId,
         uint256 merchantPercentage
-    ) external payable nonReentrant {
+    ) external payable {
         require(msg.value > 0, "Must send ETH");
         require(recipient != address(0), "Invalid recipient address");
         require(merchantPercentage <= 100, "Percentage cannot exceed 100");
 
         uint256 recipientAmount = (msg.value * merchantPercentage) / 100;
         uint256 ownerAmount = msg.value - recipientAmount;
-
-        // Safer ETH transfer to recipient
-        recipient.transfer(recipientAmount);
-        // Safer ETH transfer to owner
-        payable(owner()).transfer(ownerAmount);
 
         emit OrderPaid(
             msg.sender,
@@ -50,6 +43,11 @@ contract PaymentProcessor is Ownable, ReentrancyGuard {
             ownerAmount,
             merchantPercentage
         );
+        
+        // Safer ETH transfer to recipient
+        recipient.transfer(recipientAmount);
+        // Safer ETH transfer to owner
+        payable(owner()).transfer(ownerAmount);
     }
 
     // Fallback and receive functions to accept ETH
