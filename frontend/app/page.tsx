@@ -1,3 +1,3 @@
 export default function Home() {
-  return <>Frontend is Up!</>;
+  return <>This main page does not contain any information!</>;
 }
