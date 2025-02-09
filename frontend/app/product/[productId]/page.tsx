@@ -2,20 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import {
-  CHAIN_ID,
-  CONTRACT_ADDRESS,
-  publicClient,
-  RPC_URL,
-  walletClient,
-} from "@/app/web3/ethereum/client";
 import { payOrder } from "@/app/web3/ethereum/paymentProcessor";
 import { createOrder } from "../../api/order";
 import { getProduct, IProduct } from "@/app/api/product";
 import { getMerchant, IMerchant } from "@/app/api/merchant";
-
-const BACKEND_BASE_URL =
-  process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
 
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
