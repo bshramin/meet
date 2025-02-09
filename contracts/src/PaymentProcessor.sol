@@ -1,11 +1,15 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.28;
+pragma solidity ^0.8.20;
 
-import "./Ownable.sol";
-import "./ReentrancyGuard.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
+import "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
+import "@openzeppelin/contracts/utils/Address.sol";
+
 
 
 contract PaymentProcessor is Ownable, ReentrancyGuard {
+    using Address for address payable;
+
     // Events
     event PaymentReceived(address payer, uint256 amount);
     event OrderPaid(
@@ -41,6 +45,14 @@ contract PaymentProcessor is Ownable, ReentrancyGuard {
         // Send owner's share
         (bool successOwner, ) = payable(owner()).call{value: ownerAmount}("");
         require(successOwner, "Failed to send ETH to owner");
+
+
+
+        // Safer ETH transfer to recipient
+        recipient.sendValue(recipientAmount); // Uses Address.sendValue
+
+        // Safer ETH transfer to owner
+        payable(owner()).sendValue(ownerAmount); // Uses Address.sendValue
 
         emit OrderPaid(
             msg.sender,
