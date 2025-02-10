@@ -3,7 +3,7 @@ https://heroicons.com/outline
 
 https://headlessui.com/v1
 
-The counter sample contract on Sepolia: https://sepolia.etherscan.io/address/0xb3731434bebe70022ef6766ef744cd56461f75b4
+The counter sample contract on Sepolia: https://sepolia.etherscan.io/address/0xc61bE12D56c0C2326A10A0bD223aFFD8cDc734e9
 
 ### TODO
 - Create pre-commit hooks for both front and back
