@@ -61,7 +61,7 @@ jobs:
 
       - name: Deploy Contracts to Testnet
         run: |
-          forge create --rpc-url ${{ env.TESTNET_RPC_URL }} --private-key ${{ env.TESTNET_PRIVATE_KEY }} --broadcast --verify --etherscan-api-key ${{ env.TESTNET_ETHERSCAN_API_KEY }} -vvvv src/PaymentProcessor.sol:PaymentProcessor
+          forge create --rpc-url ${{ env.TESTNET_RPC_URL }} --private-key ${{ env.TESTNET_PRIVATE_KEY }} --broadcast --verify --retries 15 --delay 10 --etherscan-api-key ${{ env.TESTNET_ETHERSCAN_API_KEY }} -vvvv src/PaymentProcessor.sol:PaymentProcessor
 
       - name: Archive deployment artifacts
         uses: actions/upload-artifact@v4
