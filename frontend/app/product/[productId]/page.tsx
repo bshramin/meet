@@ -6,6 +6,7 @@ import { payOrder } from "@/app/web3/ethereum/paymentProcessor";
 import { createOrder } from "../../api/order";
 import { getProduct, IProduct } from "@/app/api/product";
 import { getMerchant, IMerchant } from "@/app/api/merchant";
+import { IOrder } from "@/app/api/order";
 
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
@@ -13,13 +14,7 @@ export default function ProductOverview() {
   const [productQuantity, setProductQuantity] = useState(1);
   const [product, setProduct] = useState<IProduct | null>(null);
   const [merchant, setMerchant] = useState<IMerchant | null>(null);
-  const [order, setOrder] = useState({
-    id: "",
-    merchant_id: "",
-    total_amount: 0,
-    status: "",
-    items: [],
-  });
+  const [order, setOrder] = useState<IOrder | null>(null);
   const { productId } = useParams<{ productId: string }>();
 
   useEffect(() => {
@@ -29,17 +24,21 @@ export default function ProductOverview() {
       try {
         const productResult = await getProduct(productId);
         if (!productResult) {
-          throw("Received an empty product!");
+          throw "Received an empty product!";
         }
         if (!productResult.merchantId) {
-          console.log("productResult: ",productResult,productResult.merchantId)
-          throw("Received a product with empty merchant id!");
+          console.log(
+            "productResult: ",
+            productResult,
+            productResult.merchantId
+          );
+          throw "Received a product with empty merchant id!";
         }
         setProduct(productResult);
 
         const merchantResult = await getMerchant(productResult.merchantId);
-        if (!merchantResult ){
-          throw("Received an empty merchant!");
+        if (!merchantResult) {
+          throw "Received an empty merchant!";
         }
         setMerchant(merchantResult);
       } catch (err) {
@@ -62,29 +61,44 @@ export default function ProductOverview() {
       setError("Merchant not found. Please try again.");
       return;
     }
-    setLoading(true)
-    setError("")
-    
-    if (!order) {
-      try {
-        const result = await createOrder(product, productQuantity);
-        setOrder(result);
-        console.log("Order created successfully:", result);
-      } catch (err) {
-        console.error("Failed to create order:", err);
-        setError("Failed to create order. Please try again.");
-      }
-    }
+    setLoading(true);
+    setError("");
 
     try {
-      await payOrder(merchant.wallet, order.id, merchant.percentage);
+      const result = await createOrder(product, productQuantity);
+      setOrder(result);
+      console.log("Order created successfully:", result);
     } catch (err) {
-      console.error("Failed to pay order:", err);
-      setError("Failed to pay order. Please try again.");
+      console.error("Failed to create order:", err);
+      setError("Failed to create order. Please try again.");
+      return;
     } finally {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    if (merchant && order) {
+      // Now that 'order' has updated, pay for the order
+      console.log("paying the order: ", order);
+      const processPayment = async () => {
+        try {
+          await payOrder(
+            merchant.wallet,
+            order.id,
+            order.totalAmountEth,
+            merchant.percentage
+          );
+        } catch (err) {
+          console.error("Failed to pay order:", err);
+          setError("Failed to pay order. Please try again.");
+        } finally {
+          setLoading(false);
+        }
+      };
+      processPayment();
+    }
+  }, [order]);
 
   return (
     <div className="bg-white">

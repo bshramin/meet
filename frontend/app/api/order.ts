@@ -1,5 +1,13 @@
 import { IProduct } from "./product";
 
+interface IOrder {
+  id: string;
+  merchantId: string;
+  totalAmount: number;
+  totalAmountEth: number;
+  status: string;
+}
+
 async function createOrder(product: IProduct, productQuantity: number) {
   let order;
   const BACKEND_BASE_URL =
@@ -37,3 +45,4 @@ async function createOrder(product: IProduct, productQuantity: number) {
 }
 
 export { createOrder };
+export type { IOrder };

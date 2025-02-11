@@ -17,7 +17,7 @@ export async function seed(knex) {
         name: "Dylan",
         email: "dylan@example.com",
         wallet: "0x1234567890123456789012345678901234567890",
-        percentage: 90.00,
+        percentage: 9000,
       },
     ])
     .returning("id");

@@ -14,8 +14,8 @@ const paymentProcessorABI = [
     name: "payOrder",
     inputs: [
       { name: "recipient", type: "address", internalType: "address payable" },
-      { name: "orderId", type: "uint256", internalType: "uint256" },
-      { name: "recipientPercentage", type: "uint256", internalType: "uint256" },
+      { name: "orderId", type: "string", internalType: "string" },
+      { name: "merchantPercentage", type: "uint256", internalType: "uint256" },
     ],
     outputs: [],
     stateMutability: "payable",
@@ -59,9 +59,9 @@ const paymentProcessorABI = [
       },
       {
         name: "orderId",
-        type: "uint256",
+        type: "string",
         indexed: false,
-        internalType: "uint256",
+        internalType: "string",
       },
       {
         name: "recipient",
@@ -88,7 +88,7 @@ const paymentProcessorABI = [
         internalType: "uint256",
       },
       {
-        name: "recipientPercentage",
+        name: "merchantPercentage",
         type: "uint256",
         indexed: false,
         internalType: "uint256",

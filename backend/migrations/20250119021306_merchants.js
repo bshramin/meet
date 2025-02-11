@@ -8,7 +8,7 @@ export async function up(knex) {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
     table.string("name").notNullable(); // Merchant name
     table.string("wallet").notNullable(); // Merchant wallet address
-    table.decimal("percentage", 4, 2).notNullable(); // Merchant percentage
+    table.integer("percentage").notNullable(); // Merchant percentage (90% would be stored as 9000)
     table.string("email").notNullable().unique(); // Unique email
     table.timestamps(true, true); // Created at and Updated at
   });

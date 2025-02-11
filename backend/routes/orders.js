@@ -1,4 +1,4 @@
-import  express from "express";
+import express from "express";
 var router = express.Router();
 import { createOrder, createOrderItem } from "../repository/orders.js";
 import { getProductById } from "../repository/products.js";
@@ -8,7 +8,7 @@ router.post("/", async function (req, res, next) {
     const { items } = req.body;
     const order = await createOrder(req.body);
 
-    let total_amount = 0;
+    let totalAmount = 0;
 
     if (items && items.length > 0) {
       // Use Promise.all to handle all async operations in parallel
@@ -25,13 +25,14 @@ router.post("/", async function (req, res, next) {
             product.price,
             item.quantity
           );
-          total_amount += product.price * item.quantity;
+          totalAmount += product.price * item.quantity;
           return orderItem;
         })
       );
     }
 
-    order.total_amount = total_amount;
+    order.totalAmount = totalAmount;
+    order.totalAmountEth = 0.0001; // TODO: change this hardcoded value, should also store in DB on order record
     res.json(order);
   } catch (error) {
     console.error(error);
