@@ -10,13 +10,13 @@ contract PaymentProcessorTest is Test {
     address payable public recipient;
     address payable public owner;
     address public payer;
-    uint256 public orderId;
+    string public orderId;
 
     event PaymentReceived(address payer, uint256 amount);
     event OrderPaid(
         address payer,
         uint256 amount,
-        uint256 orderId,
+        string orderId,
         address recipient,
         uint256 recipientAmount,
         address owner,
@@ -39,7 +39,7 @@ contract PaymentProcessorTest is Test {
 
         // Fund payer account
         vm.deal(payer, 100 ether);
-        orderId = 1;
+        orderId = "1";
     }
 
     function test_InitialOwnership() public view {
@@ -50,8 +50,7 @@ contract PaymentProcessorTest is Test {
         uint256 paymentAmount = 1 ether;
         uint256 merchantPercentage = 9000; // 90.00%
 
-        uint256 expectedRecipientAmount = (paymentAmount * merchantPercentage) /
-            10000;
+        uint256 expectedRecipientAmount = (paymentAmount * merchantPercentage) / 10000;
         uint256 expectedOwnerAmount = paymentAmount - expectedRecipientAmount;
 
         uint256 initialRecipientBalance = recipient.balance;
@@ -70,32 +69,20 @@ contract PaymentProcessorTest is Test {
             merchantPercentage
         );
 
-        processor.payOrder{value: paymentAmount}(
-            recipient,
-            orderId,
-            merchantPercentage
-        );
+        processor.payOrder{value: paymentAmount}(recipient, orderId, merchantPercentage);
 
-        assertEq(
-            recipient.balance,
-            initialRecipientBalance + expectedRecipientAmount
-        );
+        assertEq(recipient.balance, initialRecipientBalance + expectedRecipientAmount);
         assertEq(owner.balance, initialOwnerBalance + expectedOwnerAmount);
     }
 
-    function testFuzz_PaymentWithDifferentAmounts(
-        uint96 paymentAmount,
-        uint256 merchantPercentage
-    ) public {
+    function testFuzz_PaymentWithDifferentAmounts(uint96 paymentAmount, uint256 merchantPercentage) public {
         // Bound the percentage to valid ranges (0.01% to 100.00%)
         merchantPercentage = bound(merchantPercentage, 1, 10000);
         // Ensure payment amount is not 0
         vm.assume(paymentAmount > 0);
 
-        uint256 expectedRecipientAmount = (uint256(paymentAmount) *
-            merchantPercentage) / 10000;
-        uint256 expectedOwnerAmount = uint256(paymentAmount) -
-            expectedRecipientAmount;
+        uint256 expectedRecipientAmount = (uint256(paymentAmount) * merchantPercentage) / 10000;
+        uint256 expectedOwnerAmount = uint256(paymentAmount) - expectedRecipientAmount;
 
         uint256 initialRecipientBalance = recipient.balance;
         uint256 initialOwnerBalance = owner.balance;
@@ -103,16 +90,10 @@ contract PaymentProcessorTest is Test {
         vm.deal(payer, uint256(paymentAmount));
 
         vm.prank(payer);
-        processor.payOrder{value: paymentAmount}(
-            recipient,
-            orderId,
-            merchantPercentage
-        );
+        // Using the same orderId ("1") for fuzz tests
+        processor.payOrder{value: paymentAmount}(recipient, orderId, merchantPercentage);
 
-        assertEq(
-            recipient.balance,
-            initialRecipientBalance + expectedRecipientAmount
-        );
+        assertEq(recipient.balance, initialRecipientBalance + expectedRecipientAmount);
         assertEq(owner.balance, initialOwnerBalance + expectedOwnerAmount);
     }
 
@@ -139,24 +120,19 @@ contract PaymentProcessorTest is Test {
         percentages[2] = 9500; // 95.00%
 
         for (uint256 i = 0; i < amounts.length; i++) {
-            uint256 expectedRecipientAmount = (amounts[i] * percentages[i]) /
-                10000;
+            uint256 expectedRecipientAmount = (amounts[i] * percentages[i]) / 10000;
             uint256 expectedOwnerAmount = amounts[i] - expectedRecipientAmount;
 
             uint256 initialRecipientBalance = recipient.balance;
             uint256 initialOwnerBalance = owner.balance;
 
-            vm.prank(payer);
-            processor.payOrder{value: amounts[i]}(
-                recipient,
-                orderId + i,
-                percentages[i]
-            );
+            // Generate a unique orderId for each iteration, e.g. "1", "2", "3"
+            string memory currentOrderId = uint2str(i + 1);
 
-            assertEq(
-                recipient.balance,
-                initialRecipientBalance + expectedRecipientAmount
-            );
+            vm.prank(payer);
+            processor.payOrder{value: amounts[i]}(recipient, currentOrderId, percentages[i]);
+
+            assertEq(recipient.balance, initialRecipientBalance + expectedRecipientAmount);
             assertEq(owner.balance, initialOwnerBalance + expectedOwnerAmount);
         }
     }
@@ -173,16 +149,11 @@ contract PaymentProcessorTest is Test {
         uint256 paymentAmount = 1 ether;
         uint256 merchantPercentage = 9000; // 90.00%
 
-        uint256 expectedRecipientAmount = (paymentAmount * merchantPercentage) /
-            10000;
+        uint256 expectedRecipientAmount = (paymentAmount * merchantPercentage) / 10000;
         uint256 expectedOwnerAmount = paymentAmount - expectedRecipientAmount;
 
         vm.prank(payer);
-        processor.payOrder{value: paymentAmount}(
-            recipient,
-            orderId,
-            merchantPercentage
-        );
+        processor.payOrder{value: paymentAmount}(recipient, orderId, merchantPercentage);
 
         // Verify funds went to new owner
         assertEq(newOwner.balance, expectedOwnerAmount);
@@ -190,20 +161,20 @@ contract PaymentProcessorTest is Test {
 
     function test_RevertIf_ZeroPayment() public {
         vm.prank(payer);
-        vm.expectRevert("Must send ETH"); // Updated to match exact revert message
+        vm.expectRevert("Must send ETH");
         processor.payOrder{value: 0}(recipient, orderId, 9000);
     }
 
     function test_RevertIf_InvalidRecipient() public {
         vm.prank(payer);
-        vm.expectRevert("Invalid recipient address"); // Updated to match exact revert message
+        vm.expectRevert("Invalid recipient address");
         processor.payOrder{value: 1 ether}(payable(address(0)), orderId, 9000);
     }
 
     function test_RevertIf_InvalidPercentage() public {
         vm.prank(payer);
-        vm.expectRevert("Percentage cannot exceed 100%"); // Updated to match exact revert message
-        processor.payOrder{value: 1 ether}(recipient, orderId, 10001); // Test with 100.01%
+        vm.expectRevert("Percentage cannot exceed 100%");
+        processor.payOrder{value: 1 ether}(recipient, orderId, 10001);
     }
 
     function test_RevertIf_NonOwnerTransfer() public {
@@ -217,5 +188,28 @@ contract PaymentProcessorTest is Test {
             )
         );
         processor.transferOwnership(newOwner);
+    }
+
+    // Helper function to convert uint256 to string
+    function uint2str(uint256 _i) internal pure returns (string memory) {
+        if (_i == 0) {
+            return "0";
+        }
+        uint256 j = _i;
+        uint256 length;
+        while (j != 0) {
+            length++;
+            j /= 10;
+        }
+        bytes memory bstr = new bytes(length);
+        uint256 k = length;
+        j = _i;
+        while (j != 0) {
+            k = k - 1;
+            uint8 temp = (48 + uint8(j % 10));
+            bstr[k] = bytes1(temp);
+            j /= 10;
+        }
+        return string(bstr);
     }
 }

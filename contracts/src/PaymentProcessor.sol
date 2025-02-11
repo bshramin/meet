@@ -9,12 +9,12 @@ contract PaymentProcessor is Ownable {
     event OrderPaid(
         address payer,
         uint256 amount,
-        uint256 orderId,
+        string orderId,
         address recipient,
         uint256 recipientAmount,
         address owner,
         uint256 ownerAmount,
-        uint256 merchantPercentage    // Now represents percentage * 100 (2 decimal places)
+        uint256 merchantPercentage // Represents percentage * 100 (2 decimal places)
     );
 
     constructor() Ownable(msg.sender) {}
@@ -22,14 +22,14 @@ contract PaymentProcessor is Ownable {
     // Function to pay for an order
     function payOrder(
         address payable recipient,
-        uint256 orderId,
+        string memory orderId,
         uint256 merchantPercentage
     ) external payable {
         require(msg.value > 0, "Must send ETH");
         require(recipient != address(0), "Invalid recipient address");
-        require(merchantPercentage <= 10000, "Percentage cannot exceed 100%");  // Changed to 10000 (100.00%)
+        require(merchantPercentage <= 10000, "Percentage cannot exceed 100%"); // 10000 corresponds to 100.00%
 
-        uint256 recipientAmount = (msg.value * merchantPercentage) / 10000;  // Changed to 10000 for 2 decimal places
+        uint256 recipientAmount = (msg.value * merchantPercentage) / 10000;
         uint256 ownerAmount = msg.value - recipientAmount;
 
         emit OrderPaid(
@@ -43,9 +43,7 @@ contract PaymentProcessor is Ownable {
             merchantPercentage
         );
         
-        // Safer ETH transfer to recipient
         recipient.transfer(recipientAmount);
-        // Safer ETH transfer to owner
         payable(owner()).transfer(ownerAmount);
     }
 
