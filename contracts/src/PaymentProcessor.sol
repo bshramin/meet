@@ -3,7 +3,6 @@ pragma solidity ^0.8.20;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 
-
 contract PaymentProcessor is Ownable {
     // Events
     event PaymentReceived(address payer, uint256 amount);
@@ -15,7 +14,7 @@ contract PaymentProcessor is Ownable {
         uint256 recipientAmount,
         address owner,
         uint256 ownerAmount,
-        uint256 merchantPercentage
+        uint256 merchantPercentage    // Now represents percentage * 100 (2 decimal places)
     );
 
     constructor() Ownable(msg.sender) {}
@@ -28,9 +27,9 @@ contract PaymentProcessor is Ownable {
     ) external payable {
         require(msg.value > 0, "Must send ETH");
         require(recipient != address(0), "Invalid recipient address");
-        require(merchantPercentage <= 100, "Percentage cannot exceed 100");
+        require(merchantPercentage <= 10000, "Percentage cannot exceed 100%");  // Changed to 10000 (100.00%)
 
-        uint256 recipientAmount = (msg.value * merchantPercentage) / 100;
+        uint256 recipientAmount = (msg.value * merchantPercentage) / 10000;  // Changed to 10000 for 2 decimal places
         uint256 ownerAmount = msg.value - recipientAmount;
 
         emit OrderPaid(
