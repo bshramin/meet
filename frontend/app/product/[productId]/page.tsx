@@ -151,6 +151,8 @@ export default function ProductOverview() {
                   <p className="mt-2 text-gray-600">
                     Total Price:{" "}
                     {product?.price ? productQuantity * product.price : 0}
+                    (~0.003 eth - hardcoded)
+                    {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
                   </p>
                 </div>
               </div>
@@ -160,7 +162,9 @@ export default function ProductOverview() {
                 onClick={handleClick}
                 disabled={loading}
               >
-                Pay 25$ (0.003 eth)
+                Pay {product?.price ? productQuantity * product.price : 0}USD
+                (~0.003 eth - hardcoded)
+                {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
               </button>
               {error != "" && <p className="mt-4 text-red-500">{error}</p>}
             </div>
