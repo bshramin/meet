@@ -2,6 +2,7 @@ import express from "express";
 var router = express.Router();
 import { createOrder, createOrderItem } from "../repository/orders.js";
 import { getProductById } from "../repository/products.js";
+import { calculateEthAmount } from "../web3/ethPrice.ts";
 
 router.post("/", async function (req, res, next) {
   try {
@@ -32,7 +33,13 @@ router.post("/", async function (req, res, next) {
     }
 
     order.totalAmount = totalAmount;
-    order.totalAmountEth = 0.0001; // TODO: change this hardcoded value, should also store in DB on order record
+    order.totalAmountEth = await calculateEthAmount(order.totalAmount); // todo: store this value and current eth price on database
+    console.log(
+      "totalAmount: ",
+      order.totalAmount,
+      "totalAmountEth: ",
+      order.totalAmountEth
+    );
     res.json(order);
   } catch (error) {
     console.error(error);
