@@ -83,4 +83,4 @@ async function calculateEthAmount(usdAmount: number): Promise<number> {
   }
 }
 
-export { calculateEthAmount };
+export { calculateEthAmount, getLatestEthPrice };

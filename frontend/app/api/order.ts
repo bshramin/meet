@@ -19,10 +19,10 @@ async function createOrder(product: IProduct, productQuantity: number) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        merchant_id: product.merchantId,
+        merchantId: product.merchantId,
         items: [
           {
-            product_id: product.id,
+            productId: product.id,
             quantity: productQuantity,
           },
         ],

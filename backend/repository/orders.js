@@ -1,13 +1,11 @@
 import db from "./connection.js";
 
-function createOrder(orderData) {
-  const { merchant_id } = orderData;
-
+function createOrder(merchantId, totalAmountUsd, totalAmountEth, ethPrice) {
   return db.one(
-    `INSERT INTO orders (merchant_id)
-     VALUES ($1)
+    `INSERT INTO orders (merchant_id, total_amount_usd,total_amount_eth, eth_price)
+     VALUES ($1, $2, $3, $4)
      RETURNING *`,
-    [merchant_id]
+    [merchantId, totalAmountUsd, totalAmountEth, ethPrice]
   );
 }
 

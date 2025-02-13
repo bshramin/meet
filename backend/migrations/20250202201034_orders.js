@@ -8,6 +8,9 @@ export async function up(knex) {
     table.uuid("id").primary().defaultTo(knex.raw("gen_random_uuid()")); // UUID primary key
     table.uuid("merchant_id").notNullable(); // Foreign key to merchants
     table.string("status").notNullable().defaultTo("pending"); // Order status
+    table.decimal("total_amount_usd", 10, 2).notNullable(); // Total amount in USD with 2 decimal places
+    table.decimal("total_amount_eth", 20, 10).notNullable(); // Total amount in ETH with 10 decimal places
+    table.decimal("eth_price", 10, 2).notNullable(); // ETH price in USD at time of order
     table.timestamps(true, true); // Created at and Updated at
 
     table

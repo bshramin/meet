@@ -9,6 +9,10 @@ export async function seed(knex) {
   await knex("products").del();
   await knex("merchants").del();
 
+  // Constants
+  const productOrderQuantity = 3;
+  const ethPrice = 3000;
+
   // Insert a merchant and store the returning UUID
   const [merchant] = await knex("merchants")
     .insert([
@@ -43,6 +47,9 @@ export async function seed(knex) {
         id: "7d4c90e7-af3b-4348-8c3d-c4965b42b28f",
         merchant_id: merchant.id,
         status: "pending",
+        total_amount_usd: product.price * productOrderQuantity,
+        total_amount_eth: (product.price * productOrderQuantity) / ethPrice,
+        eth_price: ethPrice,
       },
     ])
     .returning("*");
@@ -53,7 +60,7 @@ export async function seed(knex) {
       id: "9e3c2fdd-6b9c-4c38-8c5a-4f51c8d24427",
       order_id: order.id,
       product_id: product.id,
-      quantity: 3,
+      quantity: productOrderQuantity,
       unit_price: product.price, // Store the price at time of order
     },
   ]);
