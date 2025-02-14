@@ -22,15 +22,15 @@ async function payOrder(
   merchantPercentage: number
 ) {
   const account = await getAccount();
-  
+
   // Convert the order amount to wei (assuming orderTotalAmount is in ETH)
   const amountInWei = parseEther(orderTotalAmount.toString());
-  console.log("amountInWei",amountInWei)
+  console.log("amountInWei", amountInWei);
   return contract.write.payOrder(
     [merchantWallet, orderID, merchantPercentage],
     {
       account,
-      value: amountInWei
+      value: amountInWei,
     }
   );
 }

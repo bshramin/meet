@@ -18,4 +18,10 @@ function createOrderItem(order_id, product_id, product_price, quantity) {
   );
 }
 
+function orderPaymentSuccess(
+  orderId: string,
+  payer: string,
+  paidAmount: bigint
+) {}
+
 export { createOrder, createOrderItem };

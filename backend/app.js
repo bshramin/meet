@@ -9,8 +9,9 @@ import indexRouter from "./routes/index.js";
 import productsRouter from "./routes/products.js";
 import merchantsRouter from "./routes/merchants.js";
 import ordersRouter from "./routes/orders.js";
-import { fileURLToPath } from 'url';
-import { dirname } from 'path';
+import { contract } from "./web3/contract.ts";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
 import dotenv from "dotenv";
 dotenv.config();
 
@@ -18,7 +19,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
 var app = express();
-
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
@@ -50,6 +50,15 @@ app.use(function (err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render("error");
+});
+
+// Register Web3 event listeners
+contract.watchEvent.OrderPaid({
+  onLogs(events) {
+    for (const event of events) {
+      handleOrderPaidEvent(log);
+    }
+  },
 });
 
 export default app;

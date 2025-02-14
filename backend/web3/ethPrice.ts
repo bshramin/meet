@@ -1,6 +1,7 @@
 import { createPublicClient, http } from "viem";
 import type { PublicClient } from "viem";
 import { mainnet } from "viem/chains";
+import { CHAIN_ID, publicClient } from "./client.ts";
 
 // Types and interfaces
 type ChainlinkResponse = [
@@ -11,15 +12,11 @@ type ChainlinkResponse = [
   answeredInRound: bigint
 ];
 
-// Initialize Viem client
-const client: PublicClient = createPublicClient({
-  chain: mainnet,
-  transport: http(), // TODO: modify to custom?
-});
-
 // Constants
 const CHAINLINK_ETH_USD_FEED: `0x${string}` =
-  "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419";
+  CHAIN_ID === "1"
+    ? "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419"
+    : "0x694AA1769357215DE4FAC081bf1f309aDC325306";
 const PRICE_BUFFER_PERCENTAGE: number = 1.5;
 const CACHE_DURATION: number = 30 * 1000; // 30 seconds
 
@@ -53,7 +50,7 @@ async function getLatestEthPrice(): Promise<number> {
 
   try {
     // Get latest round data from Chainlink price feed
-    const result = (await client.readContract({
+    const result = (await publicClient.readContract({
       address: CHAINLINK_ETH_USD_FEED,
       abi: chainlinkAbi,
       functionName: "latestRoundData",

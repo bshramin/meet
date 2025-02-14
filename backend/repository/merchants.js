@@ -1,7 +1,7 @@
-import db from "./connection.js";
+import { Merchant } from "../models/index.js"; // Adjust the path as needed
 
-function getMerchantById(merchantId) {
-  return db.one("SELECT * FROM merchants WHERE id = $1", [merchantId]);
+async function getMerchantById(merchantId) {
+  return await Merchant.findByPk(merchantId);
 }
 
 export { getMerchantById };

@@ -1,52 +1,27 @@
-import camelCase from 'camelcase';
-import snakeCasePKG  from 'snakecase-keys';
-const { snakeCase } = snakeCasePKG;
-import pgPromise from 'pg-promise';
-import dotenv from 'dotenv';
-
-const pgp = pgPromise({
-  receive: (data) => {
-    Object.assign(data.data, deepTransformKeys(data.data, camelCase));
-  },
-  query: (e) => {
-    console.log("Query hook triggered", e.params)
-    // Convert camelCase → snake_case on write
-    if (e.params) {
-      e.params = deepTransformKeys(e.params, snakeCase);
-    }
-  }
-});
-
-// Deep key transformation helper
-const deepTransformKeys = (obj, transformFn) => {
-  if (Array.isArray(obj)) {
-    return obj.map(item => deepTransformKeys(item, transformFn));
-  }
-  if (obj !== null && typeof obj === 'object') {
-    return Object.keys(obj).reduce((acc, key) => {
-      const newKey = transformFn(key);
-      acc[newKey] = deepTransformKeys(obj[key], transformFn);
-      return acc;
-    }, {});
-  }
-  return obj;
-};
-
+import { Sequelize } from "sequelize";
+import dotenv from "dotenv";
 
 dotenv.config(); // Load environment variables from .env file
 
-const db = pgp({
+const db = new Sequelize({
   host: process.env.DATABASE_HOST || "localhost",
   port: process.env.DATABASE_PORT || 5432,
   database: process.env.DATABASE_NAME || "meetdb",
-  user: process.env.DATABASE_USER || "meetuser",
+  username: process.env.DATABASE_USER || "meetuser",
   password: process.env.DATABASE_PASSWORD || "password",
-  ssl:
-    process.env.NODE_ENV === "development"
-      ? false
-      : {
-          rejectUnauthorized: false,
-        },
+  dialect: "postgres",
+  dialectOptions: {
+    ssl:
+      process.env.NODE_ENV === "development"
+        ? false
+        : {
+            rejectUnauthorized: false,
+          },
+  },
+  define: {
+    underscored: true, // This automatically handles snake_case ↔ camelCase conversion
+    timestamps: true,
+  },
 });
 
 export default db;

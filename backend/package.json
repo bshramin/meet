@@ -20,12 +20,15 @@
     "http-errors": "~1.6.3",
     "jade": "~1.11.0",
     "morgan": "~1.9.1",
+    "pg": "^8.13.3",
+    "pg-hstore": "^2.3.4",
     "pg-promise": "^11.10.2",
+    "sequelize": "^6.37.5",
     "snakecase-keys": "^8.0.1",
     "viem": "^2.23.1"
   },
   "devDependencies": {
-    "knex": "^3.1.0",
-    "nodemon": "^3.1.9"
+    "nodemon": "^3.1.9",
+    "sequelize-cli": "^6.6.2"
   }
 }
