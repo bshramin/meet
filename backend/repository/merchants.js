@@ -1,4 +1,4 @@
-import { Merchant } from "../models/index.js"; // Adjust the path as needed
+import { Merchant } from "../models/index.js";
 
 async function getMerchantById(merchantId) {
   return await Merchant.findByPk(merchantId);

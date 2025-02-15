@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Product extends Model {
     /**
@@ -13,13 +13,30 @@ export default (sequelize, DataTypes) => {
   }
   Product.init(
     {
-      id: DataTypes.UUID,
-      name: DataTypes.STRING,
-      description: DataTypes.TEXT,
-      price: DataTypes.DECIMAL,
-      merchant_id: DataTypes.UUID,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      name: {
+        type: DataTypes.STRING,
+      },
+      description: {
+        type: DataTypes.TEXT,
+      },
+      price: {
+        type: DataTypes.DECIMAL,
+      },
+      merchant_id: {
+        type: DataTypes.UUID,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,

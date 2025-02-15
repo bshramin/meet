@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class OrderItem extends Model {
     /**
@@ -17,13 +17,34 @@ export default (sequelize, DataTypes) => {
   }
   OrderItem.init(
     {
-      id: DataTypes.UUID,
-      order_id: DataTypes.UUID,
-      product_id: DataTypes.UUID,
-      quantity: DataTypes.INTEGER,
-      unit_price: DataTypes.DECIMAL,
-      created_at: DataTypes.DATE,
-      updated_at: DataTypes.DATE,
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+        allowNull: false,
+      },
+      order_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      product_id: {
+        type: DataTypes.UUID,
+        allowNull: false,
+      },
+      quantity: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+      },
+      unit_price: {
+        type: DataTypes.DECIMAL,
+        allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
+      },
     },
     {
       sequelize,

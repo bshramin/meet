@@ -1,27 +1,26 @@
-import db from "./connection.js";
+import { Order, OrderItem } from "../models/index.js";
 
-function createOrder(merchantId, totalAmountUsd, totalAmountEth, ethPrice) {
-  return db.one(
-    `INSERT INTO orders (merchant_id, total_amount_usd,total_amount_eth, eth_price)
-     VALUES ($1, $2, $3, $4)
-     RETURNING *`,
-    [merchantId, totalAmountUsd, totalAmountEth, ethPrice]
-  );
+async function createOrder(
+  merchantId,
+  totalAmountUsd,
+  totalAmountEth,
+  ethPrice
+) {
+  return await Order.create({
+    merchant_id: merchantId,
+    total_amount_usd: totalAmountUsd,
+    total_amount_eth: totalAmountEth,
+    eth_price: ethPrice,
+  });
 }
 
-function createOrderItem(order_id, product_id, product_price, quantity) {
-  return db.one(
-    `INSERT INTO order_items (order_id, product_id, unit_price, quantity)
-     VALUES ($1, $2, $3, $4)
-     RETURNING *`,
-    [order_id, product_id, product_price, quantity]
-  );
+async function createOrderItem(orderId, productId, productPrice, quantity) {
+  return await OrderItem.create({
+    order_id: orderId,
+    product_id: productId,
+    unit_price: productPrice,
+    quantity: quantity,
+  });
 }
-
-function orderPaymentSuccess(
-  orderId: string,
-  payer: string,
-  paidAmount: bigint
-) {}
 
 export { createOrder, createOrderItem };

@@ -1,5 +1,5 @@
 "use strict";
-const { Model } = require("sequelize");
+import { Model } from "sequelize";
 export default (sequelize, DataTypes) => {
   class Merchant extends Model {
     /**
@@ -34,6 +34,12 @@ export default (sequelize, DataTypes) => {
       email: {
         type: DataTypes.STRING,
         allowNull: false,
+      },
+      created_at: {
+        type: DataTypes.DATE,
+      },
+      updated_at: {
+        type: DataTypes.DATE,
       },
     },
     {
