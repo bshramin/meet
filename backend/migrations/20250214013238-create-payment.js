@@ -4,10 +4,9 @@ export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable("payments", {
       id: {
-        allowNull: false,
-        autoIncrement: true,
+        type: Sequelize.UUID,
         primaryKey: true,
-        type: Sequelize.INTEGER,
+        defaultValue: Sequelize.literal("gen_random_uuid()"),
       },
       contract_address: {
         type: Sequelize.STRING,
@@ -38,7 +37,7 @@ export default {
         allowNull: false,
       },
       amount: {
-        type: Sequelize.DECIMAL(65, 0),
+        type: Sequelize.DECIMAL(20, 18),
         allowNull: false,
       },
       order_id: {
@@ -50,7 +49,7 @@ export default {
         allowNull: false,
       },
       recipient_amount: {
-        type: Sequelize.DECIMAL(65, 0),
+        type: Sequelize.DECIMAL(20, 18),
         allowNull: false,
       },
       owner: {
@@ -58,7 +57,7 @@ export default {
         allowNull: false,
       },
       owner_amount: {
-        type: Sequelize.DECIMAL(65, 0),
+        type: Sequelize.DECIMAL(20, 18),
         allowNull: false,
       },
       merchant_percentage: {

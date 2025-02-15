@@ -1,6 +1,6 @@
 import express from "express";
 var router = express.Router();
-import { createOrder, createOrderItem } from "../repository/orders.js";
+import { createOrder, createOrderItem } from "../repository/orders.ts";
 import { getProductById, getProductsByIds } from "../repository/products.js";
 import { calculateEthAmount, getLatestEthPrice } from "../web3/ethPrice.ts";
 
@@ -13,7 +13,6 @@ router.post("/", async function (req, res, next) {
       const productIds = items.map((item) => item.productId);
       const products = await getProductsByIds(productIds);
       const productMap = Object.fromEntries(products.map((p) => [p.id, p]));
-
       for (const item of items) {
         item.product = productMap[item.productId];
         totalAmountUsd += item.product.price * item.quantity;

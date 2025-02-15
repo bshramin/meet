@@ -1,4 +1,4 @@
-import { Product } from "../models/index.js";
+import { Product } from "../models/index.ts";
 import { Op } from "sequelize";
 
 async function getProductById(productId) {
@@ -10,12 +10,15 @@ async function getProductsByIds(productIds) {
     return [];
   }
 
-  return await Product.findAll({
+  const products = await Product.findAll({
     where: {
       id: {
         [Op.in]: productIds,
       },
     },
+  });
+  return products.map((p) => {
+    return p.toJSON();
   });
 }
 

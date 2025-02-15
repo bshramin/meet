@@ -27,7 +27,7 @@ export default {
         allowNull: false,
       },
       total_amount_eth: {
-        type: Sequelize.DECIMAL(20, 10),
+        type: Sequelize.DECIMAL(20, 18),
         allowNull: false,
       },
       eth_price: {

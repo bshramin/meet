@@ -9,6 +9,7 @@ import indexRouter from "./routes/index.js";
 import productsRouter from "./routes/products.js";
 import merchantsRouter from "./routes/merchants.js";
 import ordersRouter from "./routes/orders.js";
+import { handleOrderPaidEvent } from "./web3/orderPaidEvent.ts";
 import { contract } from "./web3/contract.ts";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
@@ -56,7 +57,7 @@ app.use(function (err, req, res, next) {
 contract.watchEvent.OrderPaid({
   onLogs(events) {
     for (const event of events) {
-      handleOrderPaidEvent(log);
+      handleOrderPaidEvent(event);
     }
   },
 });

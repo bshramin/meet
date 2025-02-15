@@ -10,6 +10,7 @@ export default {
     host: process.env.DB_HOST || "127.0.0.1",
     dialect: process.env.DB_DIALECT || "postgres",
     port: process.env.DB_PORT || 5432,
+    logging: false,
   },
   test: {
     username: process.env.DB_USER || "postgres",
@@ -18,6 +19,7 @@ export default {
     host: process.env.DB_HOST || "127.0.0.1",
     dialect: process.env.DB_DIALECT || "postgres",
     port: process.env.DB_PORT || 5432,
+    logging: false,
   },
   production: {
     username: process.env.DB_USER,
@@ -26,5 +28,6 @@ export default {
     host: process.env.DB_HOST,
     dialect: process.env.DB_DIALECT || "postgres",
     port: process.env.DB_PORT || 5432,
+    logging: false,
   },
 };
