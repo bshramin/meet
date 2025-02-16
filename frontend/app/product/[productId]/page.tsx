@@ -15,6 +15,7 @@ export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
   const [paymentState, setPaymentState] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [productQuantity, setProductQuantity] = useState(1);
   const [product, setProduct] = useState<IProduct | null>(null);
   const [merchant, setMerchant] = useState<IMerchant | null>(null);
@@ -69,7 +70,7 @@ export default function ProductOverview() {
     setError("");
 
     try {
-      const result = await createOrder(product, productQuantity);
+      const result = await createOrder(product, productQuantity, emailAddress); // TODO: add validation
       setOrder(result);
       console.log("Order created successfully:", result);
     } catch (err) {
@@ -141,36 +142,46 @@ export default function ProductOverview() {
             </p>
 
             <div className="mt-10">
-              <div className="mt-10">
+              <div className="mt-2">
+                <label
+                  htmlFor="price"
+                  className="block text-sm/6 font-medium text-gray-900"
+                >
+                  Your email address
+                </label>
+                <input
+                  id="exampleInput"
+                  type="email"
+                  value={emailAddress}
+                  onChange={(e) => setEmailAddress(e.target.value)} // TODO: add validation
+                  placeholder=""
+                  className="block w-64 rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                />
                 <label
                   htmlFor="price"
                   className="block text-sm/6 font-medium text-gray-900"
                 >
                   Number of sessions
                 </label>
-                <div className="mt-2">
-                  <select
-                    value={productQuantity}
-                    onChange={(event) =>
-                      setProductQuantity(parseInt(event.target.value))
-                    }
-                    className="block w-32 rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
-                  >
-                    {Array.from({ length: 20 }, (_, i) => i + 1).map(
-                      (number) => (
-                        <option key={number} value={number}>
-                          {number}
-                        </option>
-                      )
-                    )}
-                  </select>
-                  <p className="mt-2 text-gray-600">
-                    Total Price:{" "}
-                    {product?.price ? productQuantity * product.price : 0}
-                    (~0.003 eth - hardcoded)
-                    {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
-                  </p>
-                </div>
+                <select
+                  value={productQuantity}
+                  onChange={(event) =>
+                    setProductQuantity(parseInt(event.target.value))
+                  }
+                  className="block w-16 rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
+                >
+                  {Array.from({ length: 20 }, (_, i) => i + 1).map((number) => (
+                    <option key={number} value={number}>
+                      {number}
+                    </option>
+                  ))}
+                </select>
+                <p className="mt-2 text-gray-600">
+                  Total Price:{" "}
+                  {product?.price ? productQuantity * product.price : 0}
+                  (~0.003 eth - hardcoded)
+                  {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
+                </p>
               </div>
 
               <button

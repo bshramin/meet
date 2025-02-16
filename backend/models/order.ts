@@ -8,12 +8,16 @@ interface OrderAttributes {
   totalAmountUsd: string;
   totalAmountEth: string;
   ethPrice: string;
+  emailAddress?: string; // New attribute, optional since allowNull is true
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 interface OrderCreationAttributes
-  extends Optional<OrderAttributes, "id" | "createdAt" | "updatedAt"> {}
+  extends Optional<
+    OrderAttributes,
+    "id" | "createdAt" | "updatedAt" | "emailAddress"
+  > {}
 
 class Order
   extends Model<OrderAttributes, OrderCreationAttributes>
@@ -25,6 +29,7 @@ class Order
   declare totalAmountUsd: string;
   declare totalAmountEth: string;
   declare ethPrice: string;
+  declare emailAddress?: string; // Declare the new property
 
   // Timestamps managed by Sequelize
   declare readonly createdAt: Date;
@@ -71,13 +76,18 @@ export default (sequelize: Sequelize): typeof Order => {
         allowNull: false,
         field: "eth_price",
       },
+      emailAddress: {
+        type: DataTypes.STRING,
+        allowNull: true, // Matches the migration setting
+        field: "email_address",
+      },
     },
     {
       sequelize,
       modelName: "Order",
       tableName: "orders",
-      timestamps: true, // Sequelize will automatically add createdAt and updatedAt
-      underscored: true, // auto-generated fields will use snake_case (created_at, updated_at)
+      timestamps: true, // Sequelize automatically adds createdAt and updatedAt
+      underscored: true, // Uses snake_case for auto-generated fields (created_at, updated_at)
     }
   );
   return Order;

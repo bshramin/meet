@@ -1,14 +1,17 @@
 import { Order, OrderItem } from "../models/index.ts";
 
 async function createOrder(
-  merchantId,
+  merchantId: string,
+  emailAddress: string,
   totalAmountUsd,
   totalAmountEth,
   ethPrice
 ) {
   try {
+    console.log("Creating order for email:", emailAddress);
     const order = await Order.create({
       status: "pending",
+      emailAddress: emailAddress,
       merchantId: merchantId,
       totalAmountUsd: totalAmountUsd,
       totalAmountEth: totalAmountEth,

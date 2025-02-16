@@ -20,7 +20,7 @@ export default {
         {
           id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
           name: "Dylan",
-          email: "dylan@example.com",
+          email: "amin.bashiri28@gmail.com",
           wallet: "0x74280116B6990d45a61b74D359DC1dC3dc2d4833",
           percentage: 9000,
           created_at: new Date(),
@@ -54,6 +54,7 @@ export default {
       [
         {
           id: "7d4c90e7-af3b-4348-8c3d-c4965b42b28f",
+          email_address: "amin.bashiri28@gmail.com",
           merchant_id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
           status: "pending",
           total_amount_usd: 2 * productOrderQuantity,

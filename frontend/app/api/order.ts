@@ -8,7 +8,12 @@ interface IOrder {
   status: string;
 }
 
-async function createOrder(product: IProduct, productQuantity: number) {
+async function createOrder(
+  product: IProduct,
+  productQuantity: number,
+  emailAddress: string
+) {
+  console.log("Creating order for email:", emailAddress);
   let order;
   const BACKEND_BASE_URL =
     process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
@@ -20,6 +25,7 @@ async function createOrder(product: IProduct, productQuantity: number) {
       },
       body: JSON.stringify({
         merchantId: product.merchantId,
+        emailAddress,
         items: [
           {
             productId: product.id,

@@ -6,9 +6,9 @@ import { calculateEthAmount, getLatestEthPrice } from "../web3/ethPrice.ts";
 
 router.post("/", async function (req, res, next) {
   try {
-    const { merchantId, items } = req.body;
+    const { merchantId, items, emailAddress } = req.body; // TODO: add validation on input
     let totalAmountUsd = 0;
-
+    console.log("body", req.body);
     if (items && items.length > 0) {
       const productIds = items.map((item) => item.productId);
       const products = await getProductsByIds(productIds);
@@ -23,6 +23,7 @@ router.post("/", async function (req, res, next) {
 
     const order = await createOrder(
       merchantId,
+      emailAddress,
       totalAmountUsd,
       totalAmountEth,
       ethPrice
