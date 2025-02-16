@@ -2,7 +2,10 @@
 
 import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
-import { payOrder } from "@/app/web3/ethereum/paymentProcessor";
+import {
+  payOrder,
+  watchAndExecute,
+} from "@/app/web3/ethereum/paymentProcessor";
 import { createOrder } from "../../api/order";
 import { getProduct, IProduct } from "@/app/api/product";
 import { getMerchant, IMerchant } from "@/app/api/merchant";
@@ -10,6 +13,7 @@ import { IOrder } from "@/app/api/order";
 
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
+  const [paymentState, setPaymentState] = useState<string | null>(null);
   const [error, setError] = useState("");
   const [productQuantity, setProductQuantity] = useState(1);
   const [product, setProduct] = useState<IProduct | null>(null);
@@ -91,14 +95,26 @@ export default function ProductOverview() {
           );
         } catch (err) {
           console.error("Failed to pay order:", err);
+          setPaymentState("failed");
           setError("Failed to pay order. Please try again.");
         } finally {
           setLoading(false);
         }
       };
+      setPaymentState("processing");
+      console.log("paymentState: ", paymentState);
       processPayment();
     }
   }, [order]);
+
+  useEffect(() => {
+    if (paymentState === "processing" && order?.id) {
+      watchAndExecute(order.id, () => {
+        console.log("Payment was successful!");
+        setPaymentState("success");
+      });
+    }
+  }, [paymentState]);
 
   return (
     <div className="bg-white">

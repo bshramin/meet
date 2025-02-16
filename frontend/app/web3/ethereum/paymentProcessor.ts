@@ -1,4 +1,4 @@
-import { getContract, parseEther, Address } from "viem";
+import { getContract, decodeEventLog, parseEther, Address } from "viem";
 import { getAccount, publicClient, walletClient } from "./client";
 import paymentProcessorABI from "./paymentProcessorABI";
 
@@ -9,11 +9,53 @@ const contract = getContract({
   client: { public: publicClient, wallet: walletClient },
 });
 
-contract.watchEvent.OrderPaid({
-  onLogs(logs) {
-    console.log("OrderPaid event received:", logs);
-  },
-});
+type IOrderPaidEventArgs = {
+  payer: string;
+  amount: bigint;
+  orderId: string;
+  recipient: string;
+  recipientAmount: bigint;
+  owner: string;
+  ownerAmount: bigint;
+  merchantPercentage: bigint;
+};
+
+type IOrderPaidEvent = {
+  eventName: "OrderPaid";
+  args: IOrderPaidEventArgs;
+  address: string;
+  topics: string[];
+  data: string;
+  blockNumber: bigint;
+  transactionHash: string;
+  transactionIndex: number;
+  blockHash: string;
+  logIndex: number;
+  removed: boolean;
+};
+
+function watchAndExecute(orderId: string, f: () => void) {
+  contract.watchEvent.OrderPaid({
+    onLogs(logs) {
+      for (const log of logs) {
+        // Decode the event log using viem's decodeEventLog function.
+        const decoded = decodeEventLog({
+          abi: paymentProcessorABI,
+          data: log.data,
+          topics: log.topics,
+          eventName: "OrderPaid",
+        });
+
+        const args = decoded.args as unknown as IOrderPaidEventArgs;
+        // Check if the decoded orderId matches the one we're looking for.
+        if (args.orderId === orderId) {
+          console.log("Matching OrderPaid event received:", decoded);
+          f();
+        }
+      }
+    },
+  });
+}
 
 async function payOrder(
   merchantWallet: string,
@@ -35,4 +77,4 @@ async function payOrder(
   );
 }
 
-export { payOrder };
+export { payOrder, watchAndExecute };
