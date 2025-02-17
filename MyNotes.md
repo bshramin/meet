@@ -9,5 +9,7 @@ I'm using [NameCheap](namecheap.com) for domain registration.
 I'm using [CloudFlare](cloudflare.com) for SSL and caching.
 
 ### TODO
-- Create pre-commit hooks for both front and back
+- Create pre-commit hooks for both front and back.
+- Watch .ts files in the backend when `npm run dev` is running.
+- Setup SES, CloudFlare and Route 53 for email in Infra.
 - 

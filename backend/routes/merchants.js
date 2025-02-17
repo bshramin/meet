@@ -1,6 +1,6 @@
-import express from"express";
+import express from "express";
 var router = express.Router();
-import { getMerchantById } from "../repository/merchants.js";
+import { getMerchantById } from "../repository/merchants.ts";
 
 router.get("/:merchantId", function (req, res, next) {
   const merchantId = req.params.merchantId;

@@ -1,3 +1,5 @@
+import { sendEmail } from "../email/index.ts";
+import { getMerchantById } from "../repository/merchants.ts";
 import { getOrderByOrderId, updateOrderStatus } from "../repository/orders.ts";
 import { createPaymentRecord } from "../repository/payments.ts";
 
@@ -32,6 +34,23 @@ export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
   if (order) {
     if (order.totalAmountEth === payment.amount) {
       updateOrderStatus(order.id, "paid");
+      sendEmail(
+        order.emailAddress,
+        "Order Paid",
+        `Your order with id ${order.id} has been paid for.`
+      );
+      const merchant = await getMerchantById(order.merchantId);
+      if (merchant) {
+        sendEmail(
+          merchant.email,
+          "Confirmed Order",
+          `An order by ${order.email} with id ${order.id} has been paid for.` // TODO: Add order details, product, and quantity
+        );
+      } else {
+        console.error(
+          `Merchant not found for order: ${order.id} and sending email to merchant failed`
+        );
+      }
     }
   } else {
     console.error(`Order not found for payment: ${payment.id}`);

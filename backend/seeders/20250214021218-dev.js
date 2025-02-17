@@ -19,8 +19,8 @@ export default {
       [
         {
           id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
-          name: "Dylan",
-          email: "amin.bashiri28@gmail.com",
+          name: "Amin",
+          email: "contact@bashiri.info",
           wallet: "0x74280116B6990d45a61b74D359DC1dC3dc2d4833",
           percentage: 9000,
           created_at: new Date(),
@@ -36,10 +36,10 @@ export default {
       [
         {
           id: "48b406f2-6437-4248-a246-6b957e16b15b",
-          name: "One-hour session with Dylan",
+          name: "One-hour session with Amin",
           price: 2,
           description:
-            "This one-hour therapy session with Dylan provides a personalized approach to mental wellness, including cognitive restructuring, mindfulness techniques, and optional guided exercises tailored to individual needs. The session is ideal for those dealing with stress, anxiety, or personal growth challenges. Whether you're looking for coping strategies, emotional support, or a structured therapeutic plan, Dylan ensures a safe and supportive environment to help you navigate your journey.",
+            "This one-hour therapy session with Amin provides a personalized approach to mental wellness, including cognitive restructuring, mindfulness techniques, and optional guided exercises tailored to individual needs. The session is ideal for those dealing with stress, anxiety, or personal growth challenges. Whether you're looking for coping strategies, emotional support, or a structured therapeutic plan, Dylan ensures a safe and supportive environment to help you navigate your journey.",
           merchant_id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
           created_at: new Date(),
           updated_at: new Date(),
@@ -54,7 +54,7 @@ export default {
       [
         {
           id: "7d4c90e7-af3b-4348-8c3d-c4965b42b28f",
-          email_address: "amin.bashiri28@gmail.com",
+          email_address: "contact@bashiri.info",
           merchant_id: "bda172b3-8dc2-4e2b-ab64-4f51c8d24427",
           status: "pending",
           total_amount_usd: 2 * productOrderQuantity,

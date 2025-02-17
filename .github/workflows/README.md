@@ -9,11 +9,15 @@
 - `SSH_PRIVATE_KEY`
 - `DATABASE_USER`
 - `DATABASE_PASSWORD`
-- #### Github variables needed
+- `AWS_ACCESS_KEY_ID`
+- `AWS_SECRET_ACCESS_KEY`
+#### Github variables needed
 - `EC2_BACKEND_HOST`
 - `DATABASE_HOST`
 - `DATABASE_PORT`
 - `DATABASE_NAME`
+- `AWS_REGION`
+- `SOURCE_EMAIL`
 
 
 ## Terraform

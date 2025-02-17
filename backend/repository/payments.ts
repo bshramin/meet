@@ -25,16 +25,10 @@ export async function createPaymentRecord(
     },
   } = event;
 
-  console.log("Raw amount:", amount);
-  console.log("Raw recipientAmount:", recipientAmount);
-  console.log("Raw ownerAmount:", ownerAmount);
   // convert wei to eth
   const amountEth = formatUnits(amount, 18);
   const recipientAmountEth = formatUnits(recipientAmount, 18);
   const ownerAmountEth = formatUnits(ownerAmount, 18);
-  console.log("Converted amount:", amountEth);
-  console.log("Converted recipientAmount:", recipientAmountEth);
-  console.log("Converted ownerAmount:", ownerAmountEth);
 
   try {
     const payment = await Payment.create({
