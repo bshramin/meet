@@ -1,4 +1,4 @@
-import { IProduct } from "./products/[productId]";
+import { IProduct } from "./products";
 
 interface IOrder {
   id: string;
