@@ -56,6 +56,5 @@ const config = {
   },
 };
 
-module.exports = config;
 export default config as IConfig;
 export type { IConfig };

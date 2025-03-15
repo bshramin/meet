@@ -1,11 +1,11 @@
 import { Product } from "../models/index.ts";
 import { Op } from "sequelize";
 
-async function getProductById(productId) {
+async function getProductById(productId: string) {
   return await Product.findByPk(productId);
 }
 
-async function getProductsByIds(productIds) {
+async function getProductsByIds(productIds: string[]) {
   if (!productIds.length) {
     return [];
   }

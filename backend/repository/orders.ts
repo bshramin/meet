@@ -3,9 +3,9 @@ import { Order, OrderItem } from "../models/index.ts";
 async function createOrder(
   merchantId: string,
   emailAddress: string,
-  totalAmountUsd,
-  totalAmountEth,
-  ethPrice
+  totalAmountUsd: number,
+  totalAmountEth: number,
+  ethPrice: number
 ) {
   try {
     console.log("Creating order for email:", emailAddress);
@@ -24,7 +24,7 @@ async function createOrder(
   }
 }
 
-async function getOrderByOrderId(orderId) {
+async function getOrderByOrderId(orderId: string) {
   try {
     const order = await Order.findByPk(orderId);
     if (!order) {
@@ -37,7 +37,12 @@ async function getOrderByOrderId(orderId) {
   }
 }
 
-async function createOrderItem(orderId, productId, productPrice, quantity) {
+async function createOrderItem(
+  orderId: string,
+  productId: string,
+  productPrice: number,
+  quantity: number
+) {
   return await OrderItem.create({
     orderId: orderId,
     productId: productId,
@@ -46,7 +51,7 @@ async function createOrderItem(orderId, productId, productPrice, quantity) {
   });
 }
 
-async function updateOrderStatus(orderId, status) {
+async function updateOrderStatus(orderId: string, status: string) {
   try {
     return await Order.update({ status: status }, { where: { id: orderId } });
   } catch (error) {

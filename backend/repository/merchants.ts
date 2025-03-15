@@ -1,6 +1,6 @@
 import { Merchant } from "../models/index.ts";
 
-async function getMerchantById(merchantId) {
+async function getMerchantById(merchantId: string) {
   try {
     const merchant = await Merchant.findByPk(merchantId);
     if (!merchant) {

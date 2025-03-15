@@ -11,7 +11,7 @@ export interface PaymentAttributes {
   logIndex?: number;
   payer: string;
   amount: string;
-  orderId?: string;
+  orderId: string;
   recipient?: string;
   recipientAmount?: string;
   owner?: string;
@@ -27,7 +27,6 @@ interface PaymentCreationAttributes
     PaymentAttributes,
     | "id"
     | "logIndex"
-    | "orderId"
     | "recipient"
     | "recipientAmount"
     | "owner"
@@ -50,7 +49,7 @@ export class Payment
   declare logIndex?: number;
   declare payer: string;
   declare amount: string;
-  declare orderId?: string;
+  declare orderId: string;
   declare recipient?: string;
   declare recipientAmount?: string;
   declare owner?: string;
@@ -115,7 +114,7 @@ export default (sequelize: Sequelize): typeof Payment => {
       },
       orderId: {
         type: DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
         field: "order_id",
       },
       recipient: {
