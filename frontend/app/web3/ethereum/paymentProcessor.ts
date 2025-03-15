@@ -1,13 +1,16 @@
 import { getContract, decodeEventLog, parseEther, Address } from "viem";
-import { getAccount, publicClient, walletClient } from "./client";
+import { getAccount, publicClient, getWalletClient } from "./client";
 import paymentProcessorABI from "./paymentProcessorABI";
 
 const contractAddress = process.env.NEXT_PUBLIC_CONTRACT_ADDRESS;
-const contract = getContract({
-  address: contractAddress as Address,
-  abi: paymentProcessorABI,
-  client: { public: publicClient, wallet: walletClient },
-});
+
+function getPaymentContract() {
+  return getContract({
+    address: contractAddress as Address,
+    abi: paymentProcessorABI,
+    client: { public: publicClient, wallet: getWalletClient() },
+  });
+}
 
 type IOrderPaidEventArgs = {
   payer: string;
@@ -35,6 +38,8 @@ type IOrderPaidEventArgs = {
 // };
 
 function watchAndExecute(orderId: string, f: () => void) {
+  const contract = getPaymentContract();
+
   contract.watchEvent.OrderPaid({
     onLogs(logs) {
       for (const log of logs) {
@@ -63,6 +68,7 @@ async function payOrder(
   orderTotalAmount: number,
   merchantPercentage: number
 ) {
+  const contract = getPaymentContract();
   const account = await getAccount();
 
   // Convert the order amount to wei (assuming orderTotalAmount is in ETH)

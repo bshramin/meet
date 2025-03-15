@@ -20,26 +20,26 @@ const publicClient = createPublicClient({
   transport: http(RPC_URL),
 });
 
-const walletClient = createWalletClient({
-  chain: CHAIN_ID === "1" ? mainnet : sepolia,
-  transport: custom(window.ethereum!),
-});
+// const walletClient = createWalletClient({
+//   chain: CHAIN_ID === "1" ? mainnet : sepolia,
+//   transport: custom(window.ethereum!),
+// });
 
 function getWalletClient() {
   return createWalletClient({
-    chain: mainnet,
+    chain: CHAIN_ID === "1" ? mainnet : sepolia,
     transport: custom(window.ethereum!),
   });
 }
 
 async function getAccount() {
-  const [address] = await walletClient.requestAddresses();
+  const [address] = await getWalletClient().requestAddresses();
   return address;
 }
 
 export {
   publicClient,
-  walletClient,
+  // walletClient,
   getAccount,
   RPC_URL,
   CHAIN_ID,

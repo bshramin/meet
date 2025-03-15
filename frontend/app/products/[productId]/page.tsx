@@ -6,10 +6,12 @@ import {
   payOrder,
   watchAndExecute,
 } from "@/app/web3/ethereum/paymentProcessor";
-import { createOrder } from "../../api/order";
-import { getProduct, IProduct } from "@/app/api/product";
-import { getMerchant, IMerchant } from "@/app/api/merchant";
-import { IOrder } from "@/app/api/order";
+import { createOrder } from "@/app/api/order";
+import { getProduct } from "@/app/api/products";
+import { getMerchant } from "@/app/api/merchants";
+import type { IProduct } from "@/app/api/products";
+import type { IMerchant } from "@/app/api/merchants";
+import type { IOrder } from "@/app/api/order";
 
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
@@ -26,24 +28,19 @@ export default function ProductOverview() {
     const fetchData = async () => {
       setLoading(true);
       setError("");
+
       try {
+        console.log("productId:", productId);
         const productResult = await getProduct(productId);
-        if (!productResult) {
-          throw "Received an empty product!";
-        }
-        if (!productResult.merchantId) {
-          console.log(
-            "productResult: ",
-            productResult,
-            productResult.merchantId
-          );
-          throw "Received a product with empty merchant id!";
+
+        if (!productResult || !productResult.merchantId) {
+          throw new Error("Invalid product data received.");
         }
         setProduct(productResult);
 
         const merchantResult = await getMerchant(productResult.merchantId);
         if (!merchantResult) {
-          throw "Received an empty merchant!";
+          throw new Error("Invalid merchant data received.");
         }
         setMerchant(merchantResult);
       } catch (err) {
@@ -55,22 +52,19 @@ export default function ProductOverview() {
     };
 
     fetchData();
-  }, [productId]); // Runs when productId changes
+  }, [productId]);
 
   const handleClick = async () => {
-    if (!product) {
-      setError("Product not found. Please try again.");
+    if (!product || !merchant) {
+      setError("Product or Merchant data is missing.");
       return;
     }
-    if (!merchant) {
-      setError("Merchant not found. Please try again.");
-      return;
-    }
+
     setLoading(true);
     setError("");
 
     try {
-      const result = await createOrder(product, productQuantity, emailAddress); // TODO: add validation
+      const result = await createOrder(product, productQuantity, emailAddress);
       setOrder(result);
       console.log("Order created successfully:", result);
     } catch (err) {
@@ -84,8 +78,6 @@ export default function ProductOverview() {
 
   useEffect(() => {
     if (merchant && order) {
-      // Now that 'order' has updated, pay for the order
-      console.log("paying the order: ", order);
       const processPayment = async () => {
         try {
           await payOrder(
@@ -102,8 +94,8 @@ export default function ProductOverview() {
           setLoading(false);
         }
       };
+
       setPaymentState("processing");
-      console.log("paymentState: ", paymentState);
       processPayment();
     }
   }, [order]);
@@ -128,13 +120,12 @@ export default function ProductOverview() {
           </div>
 
           <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
-            {/* Description and details */}
             <h3 className="sr-only">Description</h3>
             <p className="text-base text-gray-900">
               {product?.description ?? ""}
             </p>
           </div>
-          {/* Options */}
+
           <div className="mt-4 lg:row-span-3 lg:mt-0">
             <h2 className="sr-only">Product information</h2>
             <p className="text-3xl tracking-tight text-gray-900">
@@ -144,26 +135,28 @@ export default function ProductOverview() {
             <div className="mt-10">
               <div className="mt-2">
                 <label
-                  htmlFor="price"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  htmlFor="email"
+                  className="block text-sm font-medium text-gray-900"
                 >
                   Your email address
                 </label>
                 <input
-                  id="exampleInput"
+                  id="email"
                   type="email"
                   value={emailAddress}
-                  onChange={(e) => setEmailAddress(e.target.value)} // TODO: add validation
-                  placeholder=""
+                  onChange={(e) => setEmailAddress(e.target.value)}
+                  placeholder="Enter your email"
                   className="block w-64 rounded-md border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500"
                 />
+
                 <label
-                  htmlFor="price"
-                  className="block text-sm/6 font-medium text-gray-900"
+                  htmlFor="quantity"
+                  className="block mt-4 text-sm font-medium text-gray-900"
                 >
                   Number of sessions
                 </label>
                 <select
+                  id="quantity"
                   value={productQuantity}
                   onChange={(event) =>
                     setProductQuantity(parseInt(event.target.value))
@@ -176,11 +169,11 @@ export default function ProductOverview() {
                     </option>
                   ))}
                 </select>
+
                 <p className="mt-2 text-gray-600">
                   Total Price:{" "}
-                  {product?.price ? productQuantity * product.price : 0}
-                  (~0.003 eth - hardcoded)
-                  {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
+                  {product?.price ? productQuantity * product.price : 0} USD
+                  (~0.003 ETH - hardcoded)
                 </p>
               </div>
 
@@ -189,11 +182,10 @@ export default function ProductOverview() {
                 onClick={handleClick}
                 disabled={loading}
               >
-                Pay {product?.price ? productQuantity * product.price : 0}USD
-                (~0.003 eth - hardcoded)
-                {/* TODO: Get this from viem on frontend, order hasn't been created yet */}
+                Pay {product?.price ? productQuantity * product.price : 0} USD
+                (~0.003 ETH - hardcoded)
               </button>
-              {error != "" && <p className="mt-4 text-red-500">{error}</p>}
+              {error && <p className="mt-4 text-red-500">{error}</p>}
             </div>
           </div>
         </div>
