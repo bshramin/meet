@@ -6,6 +6,7 @@ import process from "process";
 import conf from "../config/config.js";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
+import { IConfig } from "../config/config.ts";
 
 interface DbInterface {
   [key: string]: ModelStatic<Model> | Sequelize | typeof Sequelize;
@@ -17,7 +18,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const basename = path.basename(__filename);
 const env = process.env.NODE_ENV || "development";
-const config = conf[env];
+const config = conf[env as keyof IConfig];
 
 let sequelize: Sequelize;
 if (config.use_env_variable) {

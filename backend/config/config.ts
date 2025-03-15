@@ -1,6 +1,24 @@
 import dotenv from "dotenv";
+import { Dialect } from "sequelize";
 
 dotenv.config();
+
+type IConfigEnvironment = {
+  username: string;
+  password?: string;
+  database: string;
+  host: string;
+  dialect: Dialect;
+  port?: number;
+  logging: boolean;
+  use_env_variable?: string;
+};
+
+type IConfig = {
+  development: IConfigEnvironment;
+  test: IConfigEnvironment;
+  production: IConfigEnvironment;
+};
 
 export default {
   development: {
@@ -36,4 +54,6 @@ export default {
       },
     },
   },
-};
+} as IConfig;
+
+export type { IConfig };
