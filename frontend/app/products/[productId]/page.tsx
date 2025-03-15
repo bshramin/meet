@@ -6,12 +6,12 @@ import {
   payOrder,
   watchAndExecute,
 } from "@/app/web3/ethereum/paymentProcessor";
-import { createOrder } from "@/app/api/order";
+import { createOrder } from "@/app/api/orders";
 import { getProduct } from "@/app/api/products";
 import { getMerchant } from "@/app/api/merchants";
 import type { IProduct } from "@/app/api/products";
 import type { IMerchant } from "@/app/api/merchants";
-import type { IOrder } from "@/app/api/order";
+import type { IOrder } from "@/app/api/orders";
 
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
