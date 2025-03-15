@@ -41,7 +41,7 @@ jobs:
           docker rm backend || true && \
           docker run -d --name backend \
             --restart unless-stopped \
-            -p 80:3001 \
+            -p 8080:3001 \
             -e DB_HOST=${{ vars.DATABASE_HOST }} \
             -e DB_PORT=${{ vars.DATABASE_PORT }} \
             -e DB_NAME=${{ vars.DATABASE_NAME }} \
