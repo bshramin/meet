@@ -98,7 +98,7 @@ export default function ProductOverview() {
       setPaymentState("processing");
       processPayment();
     }
-  }, [order]);
+  }, [order, merchant]);
 
   useEffect(() => {
     if (paymentState === "processing" && order?.id) {
@@ -107,7 +107,7 @@ export default function ProductOverview() {
         setPaymentState("success");
       });
     }
-  }, [paymentState]);
+  }, [paymentState, order]);
 
   return (
     <div className="bg-white">

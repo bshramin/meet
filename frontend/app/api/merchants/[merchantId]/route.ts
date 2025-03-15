@@ -6,7 +6,7 @@ const BACKEND_BASE_URL =
 
 export async function GET(
   request: Request,
-  { params }: { params: { merchantId: string } }
+  { params }: { params: Promise<{ merchantId?: string }> }
 ) {
   const { merchantId } = await params;
 
