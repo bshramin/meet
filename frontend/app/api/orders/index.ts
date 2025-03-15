@@ -30,4 +30,4 @@ async function createOrder(
 }
 
 export { createOrder };
-export type { IOrder, IProduct };
+export type { IOrder };
