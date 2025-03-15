@@ -50,7 +50,10 @@ jobs:
             -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
             -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
             -e AWS_REGION=${{ vars.AWS_REGION }} \
+            -e ADMIN_EMAIL=${{ vars.ADMIN_EMAIL }} \
             -e SOURCE_EMAIL=${{ vars.SOURCE_EMAIL }} \
+            -e SOURCE_EMAIL_HOST=${{ vars.SOURCE_EMAIL_HOST }} \
+            -e SOURCE_EMAIL_PASSWORD=${{ secrets.SOURCE_EMAIL_PASSWORD }} \
             backend:latest && \
           rm backend.tar"
           

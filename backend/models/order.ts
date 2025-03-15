@@ -1,23 +1,20 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import type { Optional } from "sequelize";
 
-interface OrderAttributes {
+export interface OrderAttributes {
   id: string;
   merchantId: string;
   status: string;
   totalAmountUsd: string;
   totalAmountEth: string;
   ethPrice: string;
-  emailAddress?: string; // New attribute, optional since allowNull is true
+  emailAddress: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
 
 interface OrderCreationAttributes
-  extends Optional<
-    OrderAttributes,
-    "id" | "createdAt" | "updatedAt" | "emailAddress"
-  > {}
+  extends Optional<OrderAttributes, "id" | "createdAt" | "updatedAt"> {}
 
 class Order
   extends Model<OrderAttributes, OrderCreationAttributes>
@@ -29,7 +26,7 @@ class Order
   declare totalAmountUsd: string;
   declare totalAmountEth: string;
   declare ethPrice: string;
-  declare emailAddress?: string; // Declare the new property
+  declare emailAddress: string;
 
   // Timestamps managed by Sequelize
   declare readonly createdAt: Date;
@@ -78,7 +75,7 @@ export default (sequelize: Sequelize): typeof Order => {
       },
       emailAddress: {
         type: DataTypes.STRING,
-        allowNull: true, // Matches the migration setting
+        allowNull: false,
         field: "email_address",
       },
     },

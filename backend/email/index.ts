@@ -1,39 +1,35 @@
-import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-import type { SendEmailCommandOutput } from "@aws-sdk/client-ses";
+import nodemailer from "nodemailer";
 
-const sesClient = new SESClient({
-  region: process.env.AWS_REGION,
+// Configure SMTP transport
+const transporter = nodemailer.createTransport({
+  host: process.env.SOURCE_EMAIL_HOST,
+  port: 465,
+  secure: true, // Use true for port 465, false for 587
+  auth: {
+    user: process.env.SOURCE_EMAIL,
+    pass: process.env.SOURCE_EMAIL_PASSWORD,
+  },
 });
 
 export async function sendEmail(
   to: string,
   subject: string,
-  body: string
+  text: string,
+  html: string
 ): Promise<boolean> {
-  // Build the SES sendEmail parameters.
+  const sourceEmail = process.env.SOURCE_EMAIL;
   console.log("Sending email to", to);
-  console.log("Source email", process.env.SOURCE_EMAIL);
-  const params = {
-    Source: process.env.SOURCE_EMAIL,
-    Destination: {
-      ToAddresses: [to],
-    },
-    Message: {
-      Subject: {
-        Data: subject,
-      },
-      Body: {
-        Text: { Data: body },
-        // To send HTML content, you can include:
-        // Html: { Data: `<html><body>${body}</body></html>` },
-      },
-    },
-  };
 
   try {
-    const command = new SendEmailCommand(params);
-    const data: SendEmailCommandOutput = await sesClient.send(command);
-    console.log("Email sent successfully", data);
+    await transporter.sendMail({
+      from: sourceEmail,
+      to: to,
+      subject: subject,
+      text: text,
+      html: html,
+    });
+
+    console.log("Email sent successfully to ", to);
     return true;
   } catch (err) {
     console.error("Error sending email", err);

@@ -2,6 +2,15 @@ import { sendEmail } from "../email/index.ts";
 import { getMerchantById } from "../repository/merchants.ts";
 import { getOrderByOrderId, updateOrderStatus } from "../repository/orders.ts";
 import { createPaymentRecord } from "../repository/payments.ts";
+import { orderPaidCustomerTemplate } from "../email/templates/orderPaidCustomer.ts";
+import { orderPaidMerchantTemplate } from "../email/templates/orderPaidMerchant.ts";
+import { orderPaidAdminTemplate } from "../email/templates/orderPaidAdmin.ts";
+import {
+  getOrderPaidCustomerEmailText,
+  getOrderPaidMerchantEmailText,
+  getOrderPaidAdminEmailText,
+} from "../email/templates/emailText.ts";
+import type { OrderAttributes } from "../models/order.ts";
 
 type IOrderPaidEventArgs = {
   payer: string;
@@ -30,27 +39,69 @@ type IOrderPaidEvent = {
 
 export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
   const payment = await createPaymentRecord(event);
-  const order = await getOrderByOrderId(payment.orderId);
+  const order = (await getOrderByOrderId(payment.orderId)) as OrderAttributes;
   if (order) {
     if (order.totalAmountEth === payment.amount) {
       updateOrderStatus(order.id, "paid");
+      const shortOrderId = order.id.split("-")[0];
       sendEmail(
         order.emailAddress,
         "Order Paid",
-        `Your order with id ${order.id} has been paid for.`
+        getOrderPaidCustomerEmailText(
+          shortOrderId,
+          order.totalAmountEth.toString(),
+          order.totalAmountUsd.toString()
+        ),
+        orderPaidCustomerTemplate(
+          shortOrderId,
+          order.totalAmountEth.toString(),
+          order.totalAmountUsd.toString()
+        )
       );
       const merchant = await getMerchantById(order.merchantId);
       if (merchant) {
         sendEmail(
           merchant.email,
-          "Confirmed Order",
-          `An order by ${order.email} with id ${order.id} has been paid for.` // TODO: Add order details, product, and quantity
+          "New Order Confirmed",
+          getOrderPaidMerchantEmailText(
+            shortOrderId,
+            order.emailAddress,
+            order.totalAmountEth.toString(),
+            order.totalAmountUsd.toString()
+          ),
+          orderPaidMerchantTemplate(
+            shortOrderId,
+            order.emailAddress,
+            order.totalAmountEth.toString(),
+            order.totalAmountUsd.toString()
+          )
         );
       } else {
         console.error(
-          `Merchant not found for order: ${order.id} and sending email to merchant failed`
+          `Merchant not found for order: ${shortOrderId} and sending email to merchant failed`
         );
       }
+
+      // Send admin notification
+      const ADMIN_EMAIL = process.env.ADMIN_EMAIL || "contact@bashiri.info";
+      sendEmail(
+        ADMIN_EMAIL,
+        "Order Payment Processed",
+        getOrderPaidAdminEmailText(
+          shortOrderId,
+          order.emailAddress,
+          order.merchantId,
+          order.totalAmountEth.toString(),
+          order.totalAmountUsd.toString()
+        ),
+        orderPaidAdminTemplate(
+          shortOrderId,
+          order.emailAddress,
+          order.merchantId,
+          order.totalAmountEth.toString(),
+          order.totalAmountUsd.toString()
+        )
+      );
     }
   } else {
     console.error(`Order not found for payment: ${payment.id}`);

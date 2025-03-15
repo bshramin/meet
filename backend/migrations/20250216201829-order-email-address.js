@@ -5,7 +5,7 @@ export default {
   async up(queryInterface, Sequelize) {
     await queryInterface.addColumn("orders", "email_address", {
       type: Sequelize.STRING,
-      allowNull: false, // Set to false if you want to require this field
+      allowNull: false,
     });
   },
 
