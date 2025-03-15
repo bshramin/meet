@@ -29,5 +29,11 @@ export default {
     dialect: process.env.DB_DIALECT || "postgres",
     port: process.env.DB_PORT || 5432,
     logging: false,
+    dialectOptions: {
+      ssl: {
+        require: false,
+        rejectUnauthorized: false,
+      },
+    },
   },
 };
