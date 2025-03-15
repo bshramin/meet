@@ -50,7 +50,7 @@ ENV NODE_ENV=production
 
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
-RUN apk add --no-cache curl telnet
+RUN apk add --no-cache curl busybox-extras
 
 COPY --from=builder /app/.env.production ./
 COPY --from=builder /app/public ./public
