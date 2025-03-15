@@ -20,19 +20,19 @@ type IOrderPaidEventArgs = {
   merchantPercentage: bigint;
 };
 
-type IOrderPaidEvent = {
-  eventName: "OrderPaid";
-  args: IOrderPaidEventArgs;
-  address: string;
-  topics: string[];
-  data: string;
-  blockNumber: bigint;
-  transactionHash: string;
-  transactionIndex: number;
-  blockHash: string;
-  logIndex: number;
-  removed: boolean;
-};
+// type IOrderPaidEvent = {
+//   eventName: "OrderPaid";
+//   args: IOrderPaidEventArgs;
+//   address: string;
+//   topics: string[];
+//   data: string;
+//   blockNumber: bigint;
+//   transactionHash: string;
+//   transactionIndex: number;
+//   blockHash: string;
+//   logIndex: number;
+//   removed: boolean;
+// };
 
 function watchAndExecute(orderId: string, f: () => void) {
   contract.watchEvent.OrderPaid({
