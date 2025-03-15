@@ -20,7 +20,7 @@ type IConfig = {
   production: IConfigEnvironment;
 };
 
-export default {
+const config = {
   development: {
     username: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD || null,
@@ -54,6 +54,8 @@ export default {
       },
     },
   },
-} as IConfig;
+};
 
+module.exports = config;
+export default config as IConfig;
 export type { IConfig };

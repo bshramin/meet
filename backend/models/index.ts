@@ -3,7 +3,7 @@ import path from "path";
 import { Sequelize, DataTypes, Model } from "sequelize";
 import type { ModelStatic } from "sequelize";
 import process from "process";
-import conf from "../config/config.js";
+import conf from "../config/config.ts";
 import { dirname } from "path";
 import { fileURLToPath } from "url";
 import { IConfig } from "../config/config.ts";

@@ -6,8 +6,8 @@ ENV NODE_ENV=production
 # Set working directory
 WORKDIR /usr/src/app
 
-# Install sequelize-cli globally
-RUN npm install -g sequelize-cli
+# Install sequelize-cli and typescript globally
+RUN npm install -g sequelize-cli typescript
 
 # Install dumb-init
 RUN apk add --no-cache dumb-init
@@ -20,6 +20,9 @@ RUN npm install
 
 # Copy application files
 COPY . .
+
+# Build TypeScript files
+RUN npm run build
 
 # Use dumb-init as entrypoint
 ENTRYPOINT ["dumb-init", "--"]
