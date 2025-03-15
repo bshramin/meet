@@ -3,12 +3,16 @@ output "db_password" {
   sensitive = true # Ensures the password doesn't appear in logs
 }
 
-output "expressjs_public_ip" {
-  value = aws_instance.expressjs.public_ip
-}
+# output "expressjs_public_ip" {
+#   value = aws_instance.expressjs.public_ip
+# }
 
-output "nextjs_public_ip" {
-  value = aws_instance.nextjs.public_ip
+# output "nextjs_public_ip" {
+#   value = aws_instance.nextjs.public_ip
+# }
+
+output "joint_pubic_ip" {
+  value = aws_instance.meet_joint.public_ip
 }
 
 output "rds_endpoint" {
