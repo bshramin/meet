@@ -36,6 +36,7 @@ jobs:
         
         # Load and run the Docker image on EC2
         ssh -i private_key.pem -o StrictHostKeyChecking=no ${USER}@${HOST} "\
+          docker system prune -f && \
           docker load < migration.tar && \
           docker stop migration || true && \
           docker rm migration || true && \

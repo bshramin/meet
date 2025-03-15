@@ -37,6 +37,7 @@ jobs:
         
         # Load and run the Docker image on EC2
         ssh -i private_key.pem -o StrictHostKeyChecking=no ${USER}@${HOST} "\
+          docker system prune -f && \
           docker load < frontend.tar && \
           docker stop frontend || true && \
           docker rm frontend || true && \
