@@ -1,23 +1,20 @@
 import { NextResponse } from "next/server";
-
-interface IProduct {
-  id: string;
-  merchantId: string;
-}
-
-interface IOrder {
-  id: string;
-  merchantId: string;
-  totalAmount: number;
-  totalAmountEth: number;
-  status: string;
-}
+import { IProduct } from "../products";
+import { IOrder } from ".";
 
 const BACKEND_BASE_URL =
   process.env.NEXT_PUBLIC_BACKEND_BASE_URL || "http://localhost:3001";
 
 export async function POST(request: Request) {
-  const { product, productQuantity, emailAddress } = await request.json();
+  const {
+    product,
+    productQuantity,
+    emailAddress,
+  }: {
+    product: IProduct;
+    productQuantity: number;
+    emailAddress: string;
+  } = await request.json();
 
   if (!product || !productQuantity || !emailAddress) {
     return NextResponse.json(
