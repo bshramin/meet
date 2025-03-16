@@ -1,4 +1,4 @@
-import { Sequelize } from "sequelize";
+import { Options, Dialect, Sequelize } from "sequelize";
 import dotenv from "dotenv";
 
 dotenv.config(); // Load environment variables from .env file
@@ -9,7 +9,7 @@ const db = new Sequelize({
   database: process.env.DATABASE_NAME || "meetdb",
   username: process.env.DATABASE_USER || "meetuser",
   password: process.env.DATABASE_PASSWORD || "password",
-  dialect: "postgres",
+  dialect: "postgres" as Dialect,
   dialectOptions: {
     ssl:
       process.env.NODE_ENV === "development"
@@ -22,6 +22,6 @@ const db = new Sequelize({
     underscored: true, // This automatically handles snake_case ↔ camelCase conversion
     timestamps: true,
   },
-});
+} as Options);
 
 export default db;
