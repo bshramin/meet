@@ -4,11 +4,7 @@ import { getProductById } from "../repository/products.js";
 
 router.get(
   "/:productId",
-  function (
-    req: express.Request,
-    res: express.Response,
-    next: express.NextFunction
-  ) {
+  function (req: express.Request, res: express.Response) {
     const productId = req.params.productId;
 
     getProductById(productId)

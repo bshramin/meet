@@ -21,10 +21,7 @@ export const orderPaidMerchantTemplate = (
         amountEth
       )} ETH (${amountUsd} USD)</strong></p>
     </div>
-    <p style="color: #2c3e50; line-height: 1.6;">A new order has been paid for and is ready for processing.</p>
-    <div style="text-align: center; margin-top: 20px;">
-      <p style="color: #7f8c8d; font-size: 0.9em;">Please process this order at your earliest convenience.</p>
-    </div>
+    <p style="color: #2c3e50; line-height: 1.6;">A new order has been paid for and completed.</p>
   </div>
 </body>
 </html>

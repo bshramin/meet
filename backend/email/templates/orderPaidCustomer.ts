@@ -20,9 +20,6 @@ export const orderPaidCustomerTemplate = (
       )} ETH (${amountUsd} USD)</strong></p>
     </div>
     <p style="color: #2c3e50; line-height: 1.6;">Thank you for your payment! Your order has been successfully processed.</p>
-    <div style="text-align: center; margin-top: 20px;">
-      <p style="color: #7f8c8d; font-size: 0.9em;">If you have any questions, please don't hesitate to contact us.</p>
-    </div>
   </div>
 </body>
 </html>

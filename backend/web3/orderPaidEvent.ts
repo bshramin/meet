@@ -44,6 +44,7 @@ export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
     if (order.totalAmountEth === payment.amount) {
       updateOrderStatus(order.id, "paid");
       const shortOrderId = order.id.split("-")[0];
+      const shorMerchantId = order.merchantId.split("-")[0];
       sendEmail(
         order.emailAddress,
         "Order Paid",
@@ -90,14 +91,14 @@ export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
         getOrderPaidAdminEmailText(
           shortOrderId,
           order.emailAddress,
-          order.merchantId,
+          shorMerchantId,
           order.totalAmountEth.toString(),
           order.totalAmountUsd.toString()
         ),
         orderPaidAdminTemplate(
           shortOrderId,
           order.emailAddress,
-          order.merchantId,
+          shorMerchantId,
           order.totalAmountEth.toString(),
           order.totalAmountUsd.toString()
         )

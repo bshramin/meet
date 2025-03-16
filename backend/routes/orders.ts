@@ -13,7 +13,7 @@ interface OrderItem {
   };
 }
 
-router.post("/", async function (req, res, next) {
+router.post("/", async function (req: express.Request, res: express.Response) {
   try {
     const { merchantId, items, emailAddress } = req.body; // TODO: add validation on input
     let totalAmountUsd = 0;
@@ -84,8 +84,7 @@ router.post(
   "/addItem",
   function (
     req: express.Request<{}, {}, AddItemRequestBody>,
-    res: express.Response,
-    next: express.NextFunction
+    res: express.Response
   ) {
     const { orderId, productId, price, quantity } = req.body; // TODO: Get the price from the database not request
     createOrderItem(orderId, productId, price, quantity)

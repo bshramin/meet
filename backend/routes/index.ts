@@ -1,8 +1,7 @@
 import express from "express";
 var router = express.Router();
-import { getMerchantById } from "../repository/merchants.ts";
 
-router.get("/", function (req, res, next) {
+router.get("/", function (req: express.Request, res: express.Response) {
   res.render("index", { title: "Express server is up!" });
 });
 
