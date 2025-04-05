@@ -33,6 +33,10 @@ function getWalletClient() {
 }
 
 async function getAccount() {
+  const walletClient = getWalletClient();
+  await walletClient.switchChain({
+    id: CHAIN_ID === "1" ? mainnet.id : sepolia.id,
+  });
   const [address] = await getWalletClient().requestAddresses();
   return address;
 }
