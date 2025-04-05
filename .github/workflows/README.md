@@ -30,6 +30,9 @@
 
 ## Contracts
 #### Github secrets needed
-- `TESTNET_RPC_URL`
-- `TESTNET_PRIVATE_KEY`
+- `TESTNET_RPC_URL` -> I just grabbed one from here https://chainlist.org/?chain=1&testnets=false&search=ethereum, can probably do better
+- `TESTNET_PRIVATE_KEY` MetaMask -> Account details -> Show Private Key
 - `TESTNET_ETHERSCAN_API_KEY`
+- `MAINNET_RPC_URL`
+- `MAINNET_PRIVATE_KEY`
+- `ETHERSCAN_API_KEY`

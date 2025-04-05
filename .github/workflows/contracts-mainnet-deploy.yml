@@ -1,0 +1,65 @@
+name: Contracts Mainnet Deploy
+
+on:
+  workflow_dispatch:
+
+env:
+  FOUNDRY_PROFILE: ci
+  MAINNET_RPC_URL: ${{ secrets.MAINNET_RPC_URL }}
+  MAINNET_PRIVATE_KEY: ${{ secrets.MAINNET_PRIVATE_KEY }}
+  ETHERSCAN_API_KEY: ${{ secrets.ETHERSCAN_API_KEY }}
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: ./contracts
+    
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Install Foundry
+        uses: foundry-rs/foundry-toolchain@v1
+
+      - name: Install forge-std
+        run: |
+          git submodule update --init --recursive
+
+      - name: Cache Forge dependencies
+        uses: actions/cache@v3
+        with:
+          path: |
+            ~/.foundry/cache
+            ~/.foundry/rpc-cache
+            ./contracts/cache
+            ./contracts/out
+            ./contracts/lib
+          key: foundry-${{ runner.os }}-${{ hashFiles('./contracts/foundry.toml') }}
+          restore-keys: |
+            foundry-${{ runner.os }}-
+
+      - name: Install Dependencies
+        run: forge install
+
+      - name: Build Contracts
+        run: |
+          forge --version
+          forge build --optimize --optimizer-runs 200
+
+      - name: Run Tests
+        run: |
+          forge test -vvv
+
+      - name: Deploy Contracts to Testnet
+        run: |
+          forge create --rpc-url ${{ env.MAINNET_RPC_URL }} --private-key ${{ env.MAINNET_PRIVATE_KEY }} --broadcast --verify --retries 15 --delay 10 --etherscan-api-key ${{ env.ETHERSCAN_API_KEY }} -vvvv src/PaymentProcessor.sol:PaymentProcessor
+
+      - name: Archive deployment artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: testnet-deployments
+          path: contracts/broadcast/
