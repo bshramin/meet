@@ -112,8 +112,8 @@ export default function ProductOverview() {
           setLoading(false);
         }
       };
-
-      const orderAge = Date.now() - order.createdAt.getTime();
+      console.log(order, order.createdAt);
+      const orderAge = Date.now() - new Date(order.createdAt).getTime();
       if (orderAge > twentyMinutesInMs) {
         console.error(
           `Order ${order.id} is older than 20 minutes. Payment rejected.`
