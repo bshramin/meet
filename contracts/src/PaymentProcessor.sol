@@ -42,7 +42,7 @@ contract PaymentProcessor is Ownable {
             ownerAmount,
             merchantPercentage
         );
-        
+
         recipient.transfer(recipientAmount);
         payable(owner()).transfer(ownerAmount);
     }
