@@ -54,12 +54,12 @@ jobs:
         run: |
           forge test -vvv
 
-      - name: Deploy Contracts to Testnet
+      - name: Deploy Contracts to Mainnet
         run: |
           forge create --rpc-url ${{ env.MAINNET_RPC_URL }} --private-key ${{ env.MAINNET_PRIVATE_KEY }} --broadcast --verify --retries 15 --delay 10 --etherscan-api-key ${{ env.ETHERSCAN_API_KEY }} -vvvv src/PaymentProcessor.sol:PaymentProcessor
 
       - name: Archive deployment artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: testnet-deployments
+          name: mainnet-deployments
           path: contracts/broadcast/
