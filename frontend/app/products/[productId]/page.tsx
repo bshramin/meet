@@ -13,6 +13,8 @@ import type { IProduct } from "@/app/api/products";
 import type { IMerchant } from "@/app/api/merchants";
 import type { IOrder } from "@/app/api/orders";
 
+const twentyMinutesInMs = 20 * 60 * 1000;
+
 export default function ProductOverview() {
   const [loading, setLoading] = useState(false);
   const [paymentState, setPaymentState] = useState<string | null>(null);
@@ -31,7 +33,6 @@ export default function ProductOverview() {
       setError("");
 
       try {
-        console.log("productId:", productId);
         const productResult = await getProduct(productId);
 
         if (!productResult || !productResult.merchantId) {
@@ -84,7 +85,6 @@ export default function ProductOverview() {
     try {
       const result = await createOrder(product, productQuantity, emailAddress);
       setOrder(result);
-      console.log("Order created successfully:", result);
     } catch (err) {
       console.error("Failed to create order:", err);
       setError("Failed to create order. Please try again.");
@@ -113,6 +113,16 @@ export default function ProductOverview() {
         }
       };
 
+      const orderAge = Date.now() - order.createdAt.getTime();
+      if (orderAge > twentyMinutesInMs) {
+        console.error(
+          `Order ${order.id} is older than 20 minutes. Payment rejected.`
+        );
+        setPaymentState("failed");
+        setError("Failed to pay order. Please refresh the page and try again.");
+        return;
+      }
+
       setPaymentState("processing");
       processPayment();
     }
@@ -121,7 +131,6 @@ export default function ProductOverview() {
   useEffect(() => {
     if (paymentState === "processing" && order?.id) {
       watchAndExecute(order.id, () => {
-        console.log("Payment was successful!");
         setPaymentState("success");
       });
     }
@@ -264,6 +273,8 @@ export default function ProductOverview() {
                           ></path>
                         </svg>
                         Processing Payment...
+                        <br />
+                        This might take a minute.
                       </div>
                     ) : (
                       `Pay ${product?.price ? productQuantity * product.price : 0} USD`

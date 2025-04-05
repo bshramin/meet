@@ -1,7 +1,7 @@
 import { Model, DataTypes, Sequelize } from "sequelize";
 import type { Optional } from "sequelize";
 
-interface MerchantAttributes {
+export interface MerchantAttributes {
   id: string;
   name: string;
   wallet: string;

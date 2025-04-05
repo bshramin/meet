@@ -5,16 +5,16 @@ export interface OrderAttributes {
   id: string;
   merchantId: string;
   status: string;
-  totalAmountUsd: string;
-  totalAmountEth: string;
-  ethPrice: string;
+  totalAmountUsd: number;
+  totalAmountEth: number;
+  ethPrice: number;
   emailAddress: string;
-  createdAt?: Date;
+  createdAt: Date;
   updatedAt?: Date;
 }
 
 interface OrderCreationAttributes
-  extends Optional<OrderAttributes, "id" | "createdAt" | "updatedAt"> {}
+  extends Optional<OrderAttributes, "id" | "updatedAt"> {}
 
 class Order
   extends Model<OrderAttributes, OrderCreationAttributes>
@@ -23,9 +23,9 @@ class Order
   declare id: string;
   declare merchantId: string;
   declare status: string;
-  declare totalAmountUsd: string;
-  declare totalAmountEth: string;
-  declare ethPrice: string;
+  declare totalAmountUsd: number;
+  declare totalAmountEth: number;
+  declare ethPrice: number;
   declare emailAddress: string;
 
   // Timestamps managed by Sequelize
@@ -77,6 +77,11 @@ export default (sequelize: Sequelize): typeof Order => {
         type: DataTypes.STRING,
         allowNull: false,
         field: "email_address",
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        field: "created_at",
       },
     },
     {

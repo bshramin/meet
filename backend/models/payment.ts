@@ -10,12 +10,12 @@ export interface PaymentAttributes {
   blockHash: string;
   logIndex?: number;
   payer: string;
-  amount: string;
+  amount: number;
   orderId: string;
   recipient?: string;
-  recipientAmount?: string;
+  recipientAmount?: number;
   owner?: string;
-  ownerAmount?: string;
+  ownerAmount?: number;
   merchantPercentage?: number;
   createdAt?: Date;
   updatedAt?: Date;
@@ -48,12 +48,12 @@ export class Payment
   declare blockHash: string;
   declare logIndex?: number;
   declare payer: string;
-  declare amount: string;
+  declare amount: number;
   declare orderId: string;
   declare recipient?: string;
-  declare recipientAmount?: string;
+  declare recipientAmount?: number;
   declare owner?: string;
-  declare ownerAmount?: string;
+  declare ownerAmount?: number;
   declare merchantPercentage?: number;
 
   // timestamps provided by Sequelize

@@ -11,6 +11,8 @@ import {
   getOrderPaidAdminEmailText,
 } from "../email/templates/emailText.ts";
 import type { OrderAttributes } from "../models/order.ts";
+import { MerchantAttributes } from "../models/merchant.ts";
+import { PaymentAttributes } from "../models/payment.ts";
 
 type IOrderPaidEventArgs = {
   payer: string;
@@ -38,10 +40,25 @@ type IOrderPaidEvent = {
 };
 
 export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
-  const payment = await createPaymentRecord(event);
+  const payment = (await createPaymentRecord(event)) as PaymentAttributes;
   const order = (await getOrderByOrderId(payment.orderId)) as OrderAttributes;
+  const merchant = (await getMerchantById(
+    order.merchantId
+  )) as MerchantAttributes;
   if (order) {
-    if (order.totalAmountEth === payment.amount) {
+    const thirtyMinutesInMs = 30 * 60 * 1000;
+    const orderAge = Date.now() - order.createdAt.getTime();
+    if (orderAge > thirtyMinutesInMs) {
+      console.error(
+        `Order ${order.id} is older than 30 minutes. Payment rejected.`
+      );
+      return;
+    }
+    if (
+      order.totalAmountEth == payment.amount &&
+      payment.recipient == merchant.wallet &&
+      merchant.percentage == payment.merchantPercentage
+    ) {
       updateOrderStatus(order.id, "paid");
       const shortOrderId = order.id.split("-")[0];
       const shorMerchantId = order.merchantId.split("-")[0];
@@ -59,7 +76,6 @@ export async function handleOrderPaidEvent(event: IOrderPaidEvent) {
           order.totalAmountUsd.toString()
         )
       );
-      const merchant = await getMerchantById(order.merchantId);
       if (merchant) {
         sendEmail(
           merchant.email,

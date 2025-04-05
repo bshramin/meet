@@ -54,7 +54,6 @@ function watchAndExecute(orderId: string, f: () => void) {
         const args = decoded.args as unknown as IOrderPaidEventArgs;
         // Check if the decoded orderId matches the one we're looking for.
         if (args.orderId === orderId) {
-          console.log("Matching OrderPaid event received:", decoded);
           f();
         }
       }
@@ -73,7 +72,6 @@ async function payOrder(
 
   // Convert the order amount to wei (assuming orderTotalAmount is in ETH)
   const amountInWei = parseEther(orderTotalAmount.toString());
-  console.log("amountInWei", amountInWei);
   return contract.write.payOrder(
     [merchantWallet, orderID, merchantPercentage],
     {

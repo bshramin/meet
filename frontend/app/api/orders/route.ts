@@ -23,8 +23,6 @@ export async function POST(request: Request) {
     );
   }
 
-  console.log("Updating order for email:", emailAddress);
-
   try {
     const response = await fetch(`${BACKEND_BASE_URL}/orders`, {
       method: "POST",

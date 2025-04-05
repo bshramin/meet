@@ -6,6 +6,7 @@ interface IOrder {
   totalAmount: number;
   totalAmountEth: number;
   status: string;
+  createdAt: Date;
 }
 
 async function createOrder(
