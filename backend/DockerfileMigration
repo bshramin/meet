@@ -1,11 +1,7 @@
-# Build stage
-FROM node:20-alpine
+FROM node:23-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
-
-# Install sequelize-cli and typescript globally
-RUN npm install -g sequelize-cli typescript
 
 # Install dumb-init
 RUN apk add --no-cache dumb-init
@@ -13,20 +9,16 @@ RUN apk add --no-cache dumb-init
 # Copy package.json and package-lock.json
 COPY package.json package-lock.json* ./
 
-# Install dependencies (including sequelize)
-RUN npm install
+# Install all deps
+RUN npm install --include=dev
 
-
-# Copy application files
+# Copy the rest of the app
 COPY . .
-
-# Build TypeScript files
-RUN npm run build
 
 ENV NODE_ENV=production
 
 # Use dumb-init as entrypoint
 ENTRYPOINT ["dumb-init", "--"]
 
-# Run sequelize migrations
-CMD ["sequelize-cli", "db:migrate"]
+# Run the migration
+CMD ["npx", "sequelize-cli", "db:migrate"]

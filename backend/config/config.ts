@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { Dialect } from "sequelize";
+import type { Dialect } from "sequelize";
 
 dotenv.config();
 
@@ -22,30 +22,30 @@ type IConfig = {
 
 const config = {
   development: {
-    username: process.env.DB_USER || "postgres",
-    password: process.env.DB_PASSWORD || null,
-    database: process.env.DB_NAME || "database_development",
-    host: process.env.DB_HOST || "127.0.0.1",
-    dialect: process.env.DB_DIALECT || "postgres",
-    port: process.env.DB_PORT || 5432,
+    username: process.env.DATABASE_USER || "postgres",
+    password: process.env.DATABASE_PASSWORD || null,
+    database: process.env.DATABASE_NAME || "database_development",
+    host: process.env.DATABASE_HOST || "127.0.0.1",
+    dialect: process.env.DATABASE_DIALECT || "postgres",
+    port: process.env.DATABASE_PORT || 5432,
     logging: false,
   },
   test: {
-    username: process.env.DB_USER || "postgres",
-    password: process.env.DB_PASSWORD || null,
-    database: process.env.DB_NAME || "database_test",
-    host: process.env.DB_HOST || "127.0.0.1",
-    dialect: process.env.DB_DIALECT || "postgres",
-    port: process.env.DB_PORT || 5432,
+    username: process.env.DATABASE_USER || "postgres",
+    password: process.env.DATABASE_PASSWORD || null,
+    database: process.env.DATABASE_NAME || "database_test",
+    host: process.env.DATABASE_HOST || "127.0.0.1",
+    dialect: process.env.DATABASE_DIALECT || "postgres",
+    port: process.env.DATABASE_PORT || 5432,
     logging: false,
   },
   production: {
-    username: process.env.DB_USER,
-    password: process.env.DB_PASSWORD,
-    database: process.env.DB_NAME,
-    host: process.env.DB_HOST,
-    dialect: process.env.DB_DIALECT || "postgres",
-    port: process.env.DB_PORT || 5432,
+    username: process.env.DATABASE_USER,
+    password: process.env.DATABASE_PASSWORD,
+    database: process.env.DATABASE_NAME,
+    host: process.env.DATABASE_HOST,
+    dialect: process.env.DATABASE_DIALECT || "postgres",
+    port: process.env.DATABASE_PORT || 5432,
     logging: false,
     dialectOptions: {
       ssl: {
