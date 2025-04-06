@@ -41,11 +41,11 @@ jobs:
           docker stop migration || true && \
           docker rm migration || true && \
           docker run --name migration \
-            -e DATABASE_HOST=${{ vars.DATABASE_HOST }} \
-            -e DATABASE_PORT=${{ vars.DATABASE_PORT }} \
-            -e DATABASE_NAME=${{ vars.DATABASE_NAME }} \
-            -e DATABASE_USER=${{ secrets.DATABASE_USER }} \
-            -e DATABASE_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
+            -e DB_HOST=${{ vars.DATABASE_HOST }} \
+            -e DB_PORT=${{ vars.DATABASE_PORT }} \
+            -e DB_NAME=${{ vars.DATABASE_NAME }} \
+            -e DB_USER=${{ secrets.DATABASE_USER }} \
+            -e DB_PASSWORD=${{ secrets.DATABASE_PASSWORD }} \
             migration:latest && \
           rm migration.tar"
           

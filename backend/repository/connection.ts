@@ -4,11 +4,11 @@ import dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env file
 
 const db = new Sequelize({
-  host: process.env.DATABASE_HOST || "localhost",
-  port: process.env.DATABASE_PORT || 5432,
-  database: process.env.DATABASE_NAME || "meetdb",
-  username: process.env.DATABASE_USER || "meetuser",
-  password: process.env.DATABASE_PASSWORD || "password",
+  host: process.env.DB_HOST || "localhost",
+  port: process.env.DB_PORT || 5432,
+  database: process.env.DB_NAME || "meetdb",
+  username: process.env.DB_USER || "meetuser",
+  password: process.env.DB_PASSWORD || "password",
   dialect: "postgres" as Dialect,
   dialectOptions: {
     ssl:
