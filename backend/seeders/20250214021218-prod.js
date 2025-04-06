@@ -49,12 +49,12 @@ export default {
     );
 
     // Insert order
-    const order = await queryInterface.bulkInsert("orders", [], {
-      returning: true,
-    });
+    // const order = await queryInterface.bulkInsert("orders", [], {
+    //   returning: true,
+    // });
 
     // Insert order items
-    await queryInterface.bulkInsert("order_items", []);
+    // await queryInterface.bulkInsert("order_items", []);
   },
 
   async down(queryInterface, Sequelize) {
