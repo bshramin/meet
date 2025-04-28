@@ -12,6 +12,7 @@ import { getMerchant } from "@/app/api/merchants";
 import type { IProduct } from "@/app/api/products";
 import type { IMerchant } from "@/app/api/merchants";
 import type { IOrder } from "@/app/api/orders";
+import PaymentGuideModal from "@/app/components/PaymentGuideModal";
 
 const twentyMinutesInMs = 20 * 60 * 1000;
 
@@ -26,6 +27,7 @@ export default function ProductOverview() {
   const [merchant, setMerchant] = useState<IMerchant | null>(null);
   const [order, setOrder] = useState<IOrder | null>(null);
   const { productId } = useParams<{ productId: string }>();
+  const [isGuideModalOpen, setIsGuideModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -187,6 +189,13 @@ export default function ProductOverview() {
                 </p>
 
                 <div className="mt-10">
+                  <button
+                    onClick={() => setIsGuideModalOpen(true)}
+                    className="mb-4 text-sm text-indigo-600 hover:text-indigo-500"
+                  >
+                    Need help with payment? View our payment guide →
+                  </button>
+
                   <div className="mt-2">
                     <label
                       htmlFor="email"
@@ -287,6 +296,11 @@ export default function ProductOverview() {
           </div>
         </div>
       </div>
+
+      <PaymentGuideModal
+        isOpen={isGuideModalOpen}
+        onClose={() => setIsGuideModalOpen(false)}
+      />
     </div>
   );
 }
