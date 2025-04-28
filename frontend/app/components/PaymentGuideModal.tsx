@@ -57,15 +57,15 @@ export default function PaymentGuideModal({
             Payment Guide
           </Dialog.Title>
 
-          {!guide ? (
-            <div className="space-y-4">
-              <p className="text-gray-600">
-                Please select your country to view the payment guide:
+          <div className="space-y-4">
+            <div>
+              <p className="text-gray-600 mb-2">
+                Select your country to view the payment guide:
               </p>
               <select
                 value={selectedCountry}
                 onChange={(e) => setSelectedCountry(e.target.value)}
-                className="w-full p-2 border rounded-md"
+                className="w-64 p-2 border rounded-md"
               >
                 <option value="">Select a country</option>
                 {countries.map((country) => (
@@ -75,24 +75,26 @@ export default function PaymentGuideModal({
                 ))}
               </select>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <h2 className="text-lg font-medium">{guide.title}</h2>
-              <ol className="list-decimal list-inside space-y-2">
-                {guide.steps.map((step, index) => (
-                  <li key={index} className="text-gray-700">
-                    {step}
-                  </li>
-                ))}
-              </ol>
-            </div>
-          )}
 
-          {loading && (
-            <div className="mt-4 text-center">
-              <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
-            </div>
-          )}
+            {loading && (
+              <div className="text-center">
+                <div className="inline-block animate-spin rounded-full h-8 w-8 border-4 border-indigo-600 border-t-transparent"></div>
+              </div>
+            )}
+
+            {guide && !loading && (
+              <div className="space-y-4">
+                <h2 className="text-lg font-medium">{guide.title}</h2>
+                <ol className="list-decimal list-inside space-y-2">
+                  {guide.steps.map((step, index) => (
+                    <li key={index} className="text-gray-700">
+                      {step}
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            )}
+          </div>
 
           <div className="mt-6 flex justify-end">
             <button

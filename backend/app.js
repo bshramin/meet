@@ -9,6 +9,7 @@ import indexRouter from "./routes/index.js";
 import productsRouter from "./routes/products.js";
 import merchantsRouter from "./routes/merchants.js";
 import ordersRouter from "./routes/orders.js";
+import paymentGuidesRouter from "./routes/paymentGuides.js";
 import { handleOrderPaidEvent } from "./web3/orderPaidEvent.ts";
 import { contract } from "./web3/contract.ts";
 import { fileURLToPath } from "url";
@@ -36,6 +37,7 @@ app.use("/", indexRouter);
 app.use("/products", productsRouter);
 app.use("/merchants", merchantsRouter);
 app.use("/orders", ordersRouter);
+app.use("/payment-guides", paymentGuidesRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
