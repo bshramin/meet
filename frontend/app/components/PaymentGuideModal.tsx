@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Dialog } from "@headlessui/react";
+import ReactMarkdown from "react-markdown";
 
 interface PaymentGuide {
   title: string;
-  steps: string[];
+  body: string;
 }
 
 interface PaymentGuideModalProps {
@@ -69,7 +70,7 @@ export default function PaymentGuideModal({
               >
                 <option value="">Select a country</option>
                 {countries.map((country) => (
-                  <option key={country.code} value={country.code}>
+                  <option key={country.code} value={country.name}>
                     {country.name}
                   </option>
                 ))}
@@ -86,11 +87,9 @@ export default function PaymentGuideModal({
               <div className="space-y-4">
                 <h2 className="text-lg font-medium">{guide.title}</h2>
                 <ol className="list-decimal list-inside space-y-2">
-                  {guide.steps.map((step, index) => (
-                    <li key={index} className="text-gray-700">
-                      {step}
-                    </li>
-                  ))}
+                  <div className="text-gray-700 prose prose-sm max-w-none">
+                    <ReactMarkdown>{guide.body}</ReactMarkdown>
+                  </div>
                 </ol>
               </div>
             )}
