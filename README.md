@@ -1,6 +1,6 @@
-# Meet Project
+# Meet
 
-This project is my pet project to practice receiving Ethereum payments using a smart contract. It involves developing the frontend, backend, infrastructure, and the smart contract itself. The project is fully deployed with automated pipelines for:
+This is my pet project to practice receiving Ethereum payments using a smart contract. It involves developing the frontend, backend, infrastructure, and the smart contract itself. The project is fully deployed with automated pipelines for:
 - Planning, creating, and destroying infrastructure using Terraform.
 - Deploying the Next.js frontend, which utilizes Next.js server APIs.
 - Deploying the Express.js backend and applying migrations on the RDS instance.
